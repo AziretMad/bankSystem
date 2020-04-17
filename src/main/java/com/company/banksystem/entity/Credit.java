@@ -35,6 +35,10 @@ public class Credit {
     @Column(name = "date_of_creation")
     Date dateOfCreation;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    Client client;
+
     @Column(name = "date_of_closing")
     Date dateOfClosing;
 

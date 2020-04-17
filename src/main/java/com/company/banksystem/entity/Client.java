@@ -28,19 +28,4 @@ public class Client {
     @Column(name = "address")
     String address;
 
-    @OneToMany
-    @JoinColumn(name = "bank_account_id")
-    List<BankAccount> bankAccounts;
-
-    @OneToMany
-    @JoinColumn(name = "deposit_id")
-    List<Deposit> deposits;
-
-    @OneToMany
-    @JoinColumn(name = "credit_id")
-    List<Credit> credits;
-
-    @OneToMany
-    @JoinColumn(name = "property_id")
-    List<Property> properties;
 }

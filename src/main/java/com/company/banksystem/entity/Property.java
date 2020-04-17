@@ -24,4 +24,8 @@ public class Property {
 
     @Column(name = "description")
     String description; // описание имущества
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    Client client;
 }

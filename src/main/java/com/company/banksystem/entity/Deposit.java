@@ -41,6 +41,9 @@ public class Deposit {
 
     @Column(name = "duration")
     Integer duration;
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -43,4 +43,8 @@ public class BankAccount {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     Status status;
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
 }
