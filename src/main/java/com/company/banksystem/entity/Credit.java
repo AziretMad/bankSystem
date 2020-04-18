@@ -44,8 +44,4 @@ public class Credit {
 
     @Column(name = "duration")
     Integer duration;
-
-    @OneToMany
-    @JoinColumn(name = "property_id")
-    List<Property> properties;
 }

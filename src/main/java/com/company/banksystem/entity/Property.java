@@ -28,4 +28,8 @@ public class Property {
     @ManyToOne
     @JoinColumn(name = "client_id")
     Client client;
+
+    @ManyToOne
+    @JoinColumn(name="credit_id")
+    Credit credit;
 }
