@@ -4,10 +4,11 @@ import com.company.banksystem.entity.Client;
 import com.company.banksystem.repository.ClientRepo;
 import com.company.banksystem.service.interfaces.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepo clientRepo;

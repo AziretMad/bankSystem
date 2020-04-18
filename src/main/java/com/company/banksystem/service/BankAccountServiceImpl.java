@@ -4,10 +4,11 @@ import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.repository.BankAccountRepo;
 import com.company.banksystem.service.interfaces.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class BankAccountServiceImpl implements BankAccountService {
     @Autowired
     private BankAccountRepo bankAccountRepo;

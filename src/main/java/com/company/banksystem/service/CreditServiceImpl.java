@@ -4,10 +4,11 @@ import com.company.banksystem.entity.Credit;
 import com.company.banksystem.repository.CreditRepo;
 import com.company.banksystem.service.interfaces.CreditService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class CreditServiceImpl implements CreditService {
     @Autowired
     private CreditRepo creditRepo;

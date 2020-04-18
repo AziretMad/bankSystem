@@ -4,10 +4,11 @@ import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.repository.DepositRepo;
 import com.company.banksystem.service.interfaces.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class DepositServiceImpl implements DepositService  {
 @Autowired
 private DepositRepo depositRepo;
