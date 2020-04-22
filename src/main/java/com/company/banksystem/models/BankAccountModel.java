@@ -23,4 +23,5 @@ public class BankAccountModel {
     Date dateOfClosing;
     Status status;
     ClientModel clientModel;
+    String codeWord;
 }

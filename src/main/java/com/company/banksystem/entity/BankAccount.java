@@ -47,4 +47,7 @@ public class BankAccount {
     @ManyToOne
     @JoinColumn(name="client_id")
     Client client;
+
+    @Column(name="codeWord")
+    String codeWord;
 }

@@ -26,6 +26,7 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .dateOfClosing(bankAccountModel.getDateOfClosing())
                 .status(bankAccountModel.getStatus())
                 .client(client)
+                .codeWord(bankAccountModel.getCodeWord())
                 .build();
         return bankAccountRepo.save(bankAccount);
     }
