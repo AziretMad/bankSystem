@@ -1,5 +1,6 @@
 package com.company.banksystem.entity;
 
+import com.company.banksystem.entity.enums.Currency;
 import com.company.banksystem.entity.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -7,7 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.Date;
 
 @Entity
