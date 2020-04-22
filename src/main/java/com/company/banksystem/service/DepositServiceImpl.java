@@ -1,6 +1,9 @@
 package com.company.banksystem.service;
 
+import com.company.banksystem.entity.Client;
 import com.company.banksystem.entity.Deposit;
+import com.company.banksystem.models.ClientModel;
+import com.company.banksystem.models.DepositModel;
 import com.company.banksystem.repository.DepositRepo;
 import com.company.banksystem.service.interfaces.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +15,22 @@ import java.util.Optional;
 public class DepositServiceImpl implements DepositService  {
 @Autowired
 private DepositRepo depositRepo;
+@Autowired
+private ClientServiceImpl clientService;
     @Override
-    public Deposit create(Deposit deposit) {
-        return depositRepo.save(deposit);    }
+    public Deposit create(DepositModel depositModel) {
+        Client client = clientService.getById(depositModel.getClientModel().getId());
+        Deposit deposit = Deposit.builder()
+                .depositNumber(depositModel.getDepositNumber())
+                .amount(depositModel.getAmount())
+                .interestRate(depositModel.getInterestRate())
+                .duration(depositModel.getDuration())
+                .status(depositModel.getStatus())
+                .depositType(depositModel.getDepositType())
+                .client(client)
+                .build();
+        return depositRepo.save(deposit);
+    }
 
     @Override
     public Deposit getById(Long id) {

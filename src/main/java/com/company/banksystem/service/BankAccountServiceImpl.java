@@ -1,6 +1,8 @@
 package com.company.banksystem.service;
 
 import com.company.banksystem.entity.BankAccount;
+import com.company.banksystem.entity.Client;
+import com.company.banksystem.models.BankAccountModel;
 import com.company.banksystem.repository.BankAccountRepo;
 import com.company.banksystem.service.interfaces.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,19 @@ import java.util.Optional;
 public class BankAccountServiceImpl implements BankAccountService {
     @Autowired
     private BankAccountRepo bankAccountRepo;
+    @Autowired
+    private ClientServiceImpl clientService;
     @Override
-    public BankAccount create(BankAccount bankAccount) {
+    public BankAccount create(BankAccountModel bankAccountModel) {
+        Client client = clientService.getById(bankAccountModel.getClientModel().getId());
+        BankAccount bankAccount = BankAccount.builder().accountNumber(bankAccountModel.getAccountNumber())
+                .amount(bankAccountModel.getAmount())
+                .currency(bankAccountModel.getCurrency())
+                .dateOfCreation(bankAccountModel.getDateOfCreation())
+                .dateOfClosing(bankAccountModel.getDateOfClosing())
+                .status(bankAccountModel.getStatus())
+                .client(client)
+                .build();
         return bankAccountRepo.save(bankAccount);
     }
 

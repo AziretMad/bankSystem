@@ -1,9 +1,9 @@
 package com.company.banksystem.repository;
 
-import com.company.banksystem.entity.Deposit;
+import com.company.banksystem.entity.actions.DepositAccrual;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DepositAccrual extends JpaRepository<Deposit,Long> {
+public interface DepositAccrualRepo extends JpaRepository<DepositAccrual,Long> {
 }

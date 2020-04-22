@@ -2,11 +2,14 @@ package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.enums.CreditPaymentType;
+import com.company.banksystem.entity.enums.TransactionStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "deposit_accrual")
@@ -27,4 +30,12 @@ public class DepositAccrual {
 
     @Column(name = "amount")
     BigDecimal amount;
+
+    @CreatedDate
+    @Column(name = "date")
+    Date date = new Date();
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="status")
+    TransactionStatus status;
 }

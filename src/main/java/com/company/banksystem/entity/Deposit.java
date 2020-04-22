@@ -34,16 +34,13 @@ public class Deposit {
 
     @CreatedDate
     @Column(name = "date_of_creation")
-    Date dateOfCreation;
+    Date dateOfCreation=new Date();
 
     @Column(name = "date_of_closing")
     Date dateOfClosing;
 
     @Column(name = "duration")
     Integer duration;
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    Client client;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -52,4 +49,8 @@ public class Deposit {
     @Enumerated(EnumType.STRING)
     @Column(name = "deposit_type")
     DepositType depositType;
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
 }
