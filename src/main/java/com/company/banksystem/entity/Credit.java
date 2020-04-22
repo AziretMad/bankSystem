@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "credit")
@@ -35,13 +34,13 @@ public class Credit {
     @Column(name = "date_of_creation")
     Date dateOfCreation;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    Client client;
-
     @Column(name = "date_of_closing")
     Date dateOfClosing;
 
     @Column(name = "duration")
     Integer duration;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    Client client;
 }

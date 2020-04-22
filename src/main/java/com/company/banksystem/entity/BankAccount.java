@@ -7,7 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Currency;
+import com.company.banksystem.entity.enums.Currency;
 import java.util.Date;
 
 @Entity

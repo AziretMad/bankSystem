@@ -4,9 +4,11 @@ import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.enums.CreditPaymentType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "deposit_accrual")
@@ -27,4 +29,8 @@ public class DepositAccrual {
 
     @Column(name = "amount")
     BigDecimal amount;
+
+    @CreatedDate
+    @Column(name = "date")
+    Date date;
 }

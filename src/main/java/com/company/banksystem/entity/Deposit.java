@@ -41,9 +41,6 @@ public class Deposit {
 
     @Column(name = "duration")
     Integer duration;
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    Client client;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -52,4 +49,8 @@ public class Deposit {
     @Enumerated(EnumType.STRING)
     @Column(name = "deposit_type")
     DepositType depositType;
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
 }

@@ -1,6 +1,7 @@
 package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Client;
+import com.company.banksystem.models.ClientModel;
 import com.company.banksystem.repository.ClientRepo;
 import com.company.banksystem.service.interfaces.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,11 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepo clientRepo;
     @Override
-    public Client create(Client client) {
+    public Client create(ClientModel clientModel) {
+        Client client = Client.builder().fullName(clientModel.getFullName())
+                .address(clientModel.getAddress())
+                .telephone(clientModel.getTelephone())
+                .build();
         return clientRepo.save(client) ;
     }
 
