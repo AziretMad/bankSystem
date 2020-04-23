@@ -1,12 +1,11 @@
-package com.company.genericproject.entity;
+package com.company.banksystem.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "confirmation")
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,13 +13,6 @@ import javax.persistence.*;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Confirmation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-
-    @Column(name="payment_id")
-    Long paymentId;
-
-    @Column(name = "confirmationCode")
+    Long transactionId;
     Integer confirmationCode;
 }

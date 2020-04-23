@@ -42,4 +42,9 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
     public void delete(Long id) {
         creditPaymentRepo.deleteById(id);
     }
+
+    @Override
+    public CreditPayment update(CreditPayment entity) {
+        return creditPaymentRepo.save(entity);
+    }
 }

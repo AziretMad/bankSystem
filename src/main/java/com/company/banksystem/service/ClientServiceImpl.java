@@ -37,4 +37,9 @@ public class ClientServiceImpl implements ClientService {
     public void delete(Long id) {
     clientRepo.deleteById(id);
     }
+
+    @Override
+    public Client update(Client entity) {
+        return clientRepo.save(entity);
+    }
 }

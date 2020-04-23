@@ -41,4 +41,9 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
     public void delete(Long id) {
         depositAccrualRepo.deleteById(id);
     }
+
+    @Override
+    public DepositAccrual update(DepositAccrual entity) {
+        return depositAccrualRepo.save(entity);
+    }
 }
