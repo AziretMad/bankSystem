@@ -25,8 +25,8 @@ public class DepositController {
     }
 
     @PostMapping
-    public Deposit create(@RequestBody Deposit bankAccount) {
-        return depositService.create(bankAccount);
+    public Deposit create(@RequestBody Deposit deposit) {
+        return depositService.create(deposit);
     }
 
     @DeleteMapping("/delete/{id}")
