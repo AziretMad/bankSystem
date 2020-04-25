@@ -7,12 +7,10 @@ import com.company.banksystem.models.actions.CreditPaymentModel;
 import com.company.banksystem.repository.CreditPaymentRepo;
 import com.company.banksystem.service.interfaces.CreditPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-@Service
+
 public class CreditPaymentServiceImpl implements CreditPaymentService {
     @Autowired
     private CreditPaymentRepo creditPaymentRepo;
@@ -22,8 +20,7 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
     @Override
     public CreditPayment create(CreditPaymentModel entity) {
         Credit credit = creditService.getById(entity.getId());
-        CreditPayment creditPayment = CreditPayment.builder()
-                .amount(entity.getAmount())
+        CreditPayment creditPayment = CreditPayment.builder().amount(entity.getAmount())
                 .paymentType(entity.getPaymentType())
                 .status(TransactionStatus.AWAITING_PROCESS)
                 .credit(credit).build();
@@ -46,10 +43,8 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
         creditPaymentRepo.deleteById(id);
     }
 
-    public void creditPaymentCalculator(Long creditId){
-        Credit credit = creditService.getById(creditId);
-        Double interestRate = credit.getInterestRate();
-        BigDecimal amount = credit.getAmount();
-        Integer duration = credit.getDuration();
+    @Override
+    public CreditPayment update(CreditPayment entity) {
+        return creditPaymentRepo.save(entity);
     }
 }

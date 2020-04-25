@@ -49,4 +49,9 @@ private CreditServiceImpl creditService;
     public void delete(Long id) {
         propertyRepo.deleteById(id);
     }
+
+    @Override
+    public Property update(Property entity) {
+        return propertyRepo.save(entity);
+    }
 }

@@ -47,4 +47,9 @@ private ClientServiceImpl clientService;
     public void delete(Long id) {
     depositRepo.deleteById(id);
     }
+
+    @Override
+    public Deposit update(Deposit entity) {
+        return depositRepo.save(entity);
+    }
 }

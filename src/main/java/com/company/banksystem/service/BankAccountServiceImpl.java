@@ -46,4 +46,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void delete(Long id) {
     bankAccountRepo.deleteById(id);
     }
+
+    @Override
+    public BankAccount update(BankAccount entity) {
+        return bankAccountRepo.save(entity);
+    }
+
 }

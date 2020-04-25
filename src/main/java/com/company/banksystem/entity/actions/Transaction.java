@@ -47,4 +47,7 @@ public class Transaction {
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
     Currency currency;
+
+    @Column(name="code")
+    Integer code;
 }
