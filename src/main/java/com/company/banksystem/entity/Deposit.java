@@ -1,7 +1,7 @@
 package com.company.banksystem.entity;
 
-import com.company.banksystem.entity.enums.DepositType;
-import com.company.banksystem.entity.enums.Status;
+import com.company.banksystem.enums.DepositType;
+import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;

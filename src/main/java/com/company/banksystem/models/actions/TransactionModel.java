@@ -1,8 +1,8 @@
 package com.company.banksystem.models.actions;
 
 import com.company.banksystem.entity.BankAccount;
-import com.company.banksystem.entity.enums.Currency;
-import com.company.banksystem.entity.enums.TransactionStatus;
+import com.company.banksystem.enums.Currency;
+import com.company.banksystem.enums.TransactionStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

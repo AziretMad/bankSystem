@@ -1,6 +1,7 @@
 package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.BankAccount;
+import com.company.banksystem.models.BankAccountModel;
 import com.company.banksystem.service.BankAccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class BankAccountController {
         return bankAccountService.getById(id);
     }
     @PostMapping
-    public BankAccount create(@RequestBody BankAccount bankAccount){
+    public BankAccount create(@RequestBody BankAccountModel bankAccount){
         return bankAccountService.create(bankAccount);
     }
     @DeleteMapping("/delete/{id}")

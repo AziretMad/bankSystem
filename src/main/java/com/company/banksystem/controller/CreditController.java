@@ -1,8 +1,11 @@
 package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.Credit;
+import com.company.banksystem.models.CreditModel;
 import com.company.banksystem.service.CreditServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +24,9 @@ public class CreditController {
         return creditService.getById(id);
     }
     @PostMapping
-    public Credit create(@RequestBody Credit bankAccount){
-        return creditService.create(bankAccount);
+    public ResponseEntity create(@RequestBody CreditModel creditModel) {
+        Credit credit=creditService.create(creditModel);
+        return new ResponseEntity(credit, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id")Long id){

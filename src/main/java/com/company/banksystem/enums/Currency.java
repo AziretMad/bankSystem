@@ -1,4 +1,4 @@
-package com.company.banksystem.entity.enums;
+package com.company.banksystem.enums;
 
 public enum Currency {
     USD,

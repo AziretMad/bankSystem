@@ -1,7 +1,7 @@
 package com.company.banksystem.entity;
 
-import com.company.banksystem.entity.enums.Currency;
-import com.company.banksystem.entity.enums.Status;
+import com.company.banksystem.enums.Currency;
+import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;

@@ -2,7 +2,7 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Client;
 import com.company.banksystem.entity.Deposit;
-import com.company.banksystem.models.ClientModel;
+import com.company.banksystem.exceptions.NotFoundClient;
 import com.company.banksystem.models.DepositModel;
 import com.company.banksystem.repository.DepositRepo;
 import com.company.banksystem.service.interfaces.DepositService;
@@ -18,8 +18,9 @@ private DepositRepo depositRepo;
 @Autowired
 private ClientServiceImpl clientService;
     @Override
-    public Deposit create(DepositModel depositModel) {
+    public Deposit create(DepositModel depositModel) throws Exception {
         Client client = clientService.getById(depositModel.getClientModel().getId());
+        if(client!=null){
         Deposit deposit = Deposit.builder()
                 .depositNumber(depositModel.getDepositNumber())
                 .amount(depositModel.getAmount())
@@ -29,7 +30,8 @@ private ClientServiceImpl clientService;
                 .depositType(depositModel.getDepositType())
                 .client(client)
                 .build();
-        return depositRepo.save(deposit);
+        return depositRepo.save(deposit);}
+        else throw new NotFoundClient();
     }
 
     @Override

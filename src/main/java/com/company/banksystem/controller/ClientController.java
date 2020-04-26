@@ -1,6 +1,7 @@
 package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.Client;
+import com.company.banksystem.models.ClientModel;
 import com.company.banksystem.service.ClientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class ClientController {
     }
 
     @PostMapping
-    public Client create(@RequestBody Client bankAccount) {
-        return clientService.create(bankAccount);
+    public Client create(@RequestBody ClientModel client) {
+        return clientService.create(client);
     }
 
     @DeleteMapping("/delete/{id}")
