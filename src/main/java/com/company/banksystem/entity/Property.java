@@ -20,10 +20,10 @@ public class Property {
     Long id;
 
     @Column(name = "valuation_price")
-    BigDecimal valuationPrice;
+    BigDecimal valuationPrice; //цена, которую дали оценщики банка
 
     @Column(name="market_price")
-    BigDecimal marketPrice;
+    BigDecimal marketPrice; //рыночная оценка
 
     @Column(name = "description")
     String description; // описание имущества

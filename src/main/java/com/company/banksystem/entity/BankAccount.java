@@ -34,11 +34,11 @@ public class BankAccount {
     Currency currency;
 
     @CreatedDate
-    @Column(name = "date_of_creation")
-    Date dateOfCreation;
+    @Column(name = "created_date")
+    Date createdDate=new Date();
 
-    @Column(name = "date_of_closing")
-    Date dateOfClosing;
+    @Column(name = "closed_date")
+    Date closedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

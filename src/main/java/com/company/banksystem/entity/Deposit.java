@@ -33,11 +33,11 @@ public class Deposit {
     Double interestRate;
 
     @CreatedDate
-    @Column(name = "date_of_creation")
-    Date dateOfCreation=new Date();
+    @Column(name = "created_date")
+    Date createdDate=new Date();
 
-    @Column(name = "date_of_closing")
-    Date dateOfClosing;
+    @Column(name = "closed_date")
+    Date closedDate;
 
     @Column(name = "duration")
     Integer duration;

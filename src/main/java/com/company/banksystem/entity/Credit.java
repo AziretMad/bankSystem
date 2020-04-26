@@ -34,7 +34,7 @@ public class Credit {
 
     @CreatedDate
     @Column(name = "created_date")
-    Date createdDate;
+    Date createdDate=new Date();
 
     @Column(name = "closed_date")
     Date closedDate;

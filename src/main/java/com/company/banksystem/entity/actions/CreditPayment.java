@@ -30,8 +30,6 @@ public class CreditPayment {
     @Column(name = "amount")
     BigDecimal amount;
 
-
-
     @CreatedDate
     @Column(name = "date")
     Date date=new Date();
