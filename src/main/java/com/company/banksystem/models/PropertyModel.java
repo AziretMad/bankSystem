@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class PropertyModel {
     Long id;
-    BigDecimal price;
+    BigDecimal marketPrice;
     String description;
     ClientModel clientModel;
     CreditModel creditModel;

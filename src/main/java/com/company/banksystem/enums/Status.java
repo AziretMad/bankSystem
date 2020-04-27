@@ -1,10 +1,11 @@
-package com.company.banksystem.entity.enums;
+package com.company.banksystem.enums;
 
 public enum Status {
     ACTIVE,
     INACTIVE,
     FROZEN,
-    PAUSED;
+    PAUSED,
+    CLOSED;
 
     Status() {
     }

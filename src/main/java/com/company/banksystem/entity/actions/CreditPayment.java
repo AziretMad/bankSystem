@@ -1,8 +1,7 @@
 package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.entity.Credit;
-import com.company.banksystem.entity.enums.CreditPaymentType;
-import com.company.banksystem.entity.enums.TransactionStatus;
+import com.company.banksystem.enums.TransactionStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,10 +29,6 @@ public class CreditPayment {
 
     @Column(name = "amount")
     BigDecimal amount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_type")
-    CreditPaymentType paymentType; //Аннуитентный или дифференцированный
 
     @CreatedDate
     @Column(name = "date")

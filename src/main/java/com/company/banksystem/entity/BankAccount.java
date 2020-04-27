@@ -1,7 +1,7 @@
 package com.company.banksystem.entity;
 
-import com.company.banksystem.entity.enums.Currency;
-import com.company.banksystem.entity.enums.Status;
+import com.company.banksystem.enums.Currency;
+import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,11 +34,11 @@ public class BankAccount {
     Currency currency;
 
     @CreatedDate
-    @Column(name = "date_of_creation")
-    Date dateOfCreation;
+    @Column(name = "created_date")
+    Date createdDate=new Date();
 
-    @Column(name = "date_of_closing")
-    Date dateOfClosing;
+    @Column(name = "closed_date")
+    Date closedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

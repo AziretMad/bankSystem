@@ -1,9 +1,8 @@
 package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.entity.BankAccount;
-import com.company.banksystem.entity.enums.Currency;
-import com.company.banksystem.entity.enums.Status;
-import com.company.banksystem.entity.enums.TransactionStatus;
+import com.company.banksystem.enums.Currency;
+import com.company.banksystem.enums.TransactionStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;

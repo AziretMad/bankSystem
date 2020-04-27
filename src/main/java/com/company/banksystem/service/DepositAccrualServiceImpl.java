@@ -2,7 +2,8 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.actions.DepositAccrual;
-import com.company.banksystem.entity.enums.TransactionStatus;
+import com.company.banksystem.enums.TransactionStatus;
+import com.company.banksystem.exceptions.NotFoundDeposit;
 import com.company.banksystem.models.actions.DepositAccrualModel;
 import com.company.banksystem.repository.DepositAccrualRepo;
 import com.company.banksystem.service.interfaces.DepositAccrualService;
@@ -18,12 +19,14 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
     private DepositServiceImpl depositService;
 
     @Override
-    public DepositAccrual create(DepositAccrualModel entity) {
+    public DepositAccrual create(DepositAccrualModel entity) throws Exception {
         Deposit deposit = depositService.getById(entity.getDeposit().getId());
+        if(deposit!=null){
         DepositAccrual depositAccrual = DepositAccrual.builder().amount(entity.getAmount())
                 .status(TransactionStatus.AWAITING_PROCESS)
                 .deposit(deposit).build();
-        return depositAccrualRepo.save(depositAccrual);
+        return depositAccrualRepo.save(depositAccrual);}
+        else throw new NotFoundDeposit();
     }
 
     @Override

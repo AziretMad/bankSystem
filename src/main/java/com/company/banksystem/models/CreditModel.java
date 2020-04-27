@@ -1,10 +1,10 @@
 package com.company.banksystem.models;
 
+import com.company.banksystem.enums.CreditPaymentType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +17,7 @@ public class CreditModel {
     String creditNumber;
     BigDecimal amount;
     Double interestRate;
-    Date dateOfCreation;
-    Date dateOfClosing;
     Integer duration;
     ClientModel clientModel;
+    CreditPaymentType creditType;
 }

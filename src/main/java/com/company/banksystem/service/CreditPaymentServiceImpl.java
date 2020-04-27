@@ -2,7 +2,8 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.actions.CreditPayment;
-import com.company.banksystem.entity.enums.TransactionStatus;
+import com.company.banksystem.enums.TransactionStatus;
+import com.company.banksystem.exceptions.NotFoundCredit;
 import com.company.banksystem.models.actions.CreditPaymentModel;
 import com.company.banksystem.repository.CreditPaymentRepo;
 import com.company.banksystem.service.interfaces.CreditPaymentService;
@@ -18,13 +19,14 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
     private CreditServiceImpl creditService;
 
     @Override
-    public CreditPayment create(CreditPaymentModel entity) {
+    public CreditPayment create(CreditPaymentModel entity) throws Exception{
         Credit credit = creditService.getById(entity.getId());
+        if(credit!=null){
         CreditPayment creditPayment = CreditPayment.builder().amount(entity.getAmount())
-                .paymentType(entity.getPaymentType())
                 .status(TransactionStatus.AWAITING_PROCESS)
                 .credit(credit).build();
-        return creditPaymentRepo.save(creditPayment);
+        return creditPaymentRepo.save(creditPayment);}
+        else throw new NotFoundCredit();
     }
 
     @Override

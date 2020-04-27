@@ -1,7 +1,7 @@
 package com.company.banksystem.models.actions;
 
 import com.company.banksystem.entity.Credit;
-import com.company.banksystem.entity.enums.CreditPaymentType;
+import com.company.banksystem.enums.CreditPaymentType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

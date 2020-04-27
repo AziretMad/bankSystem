@@ -1,5 +1,7 @@
 package com.company.banksystem.entity;
 
+import com.company.banksystem.enums.Status;
+import com.company.banksystem.enums.CreditPaymentType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,11 +33,11 @@ public class Credit {
     Double interestRate;
 
     @CreatedDate
-    @Column(name = "date_of_creation")
-    Date dateOfCreation;
+    @Column(name = "created_date")
+    Date createdDate=new Date();
 
-    @Column(name = "date_of_closing")
-    Date dateOfClosing;
+    @Column(name = "closed_date")
+    Date closedDate;
 
     @Column(name = "duration")
     Integer duration;
@@ -43,4 +45,12 @@ public class Credit {
     @ManyToOne
     @JoinColumn(name = "client_id")
     Client client;
+
+    @Enumerated
+    @Column(name="status")
+    Status status;
+
+    @Enumerated
+    @Column(name="creditType")
+    CreditPaymentType creditType;
 }

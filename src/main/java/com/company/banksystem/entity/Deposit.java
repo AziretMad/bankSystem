@@ -1,7 +1,7 @@
 package com.company.banksystem.entity;
 
-import com.company.banksystem.entity.enums.DepositType;
-import com.company.banksystem.entity.enums.Status;
+import com.company.banksystem.enums.DepositType;
+import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,11 +33,11 @@ public class Deposit {
     Double interestRate;
 
     @CreatedDate
-    @Column(name = "date_of_creation")
-    Date dateOfCreation=new Date();
+    @Column(name = "created_date")
+    Date createdDate=new Date();
 
-    @Column(name = "date_of_closing")
-    Date dateOfClosing;
+    @Column(name = "closed_date")
+    Date closedDate;
 
     @Column(name = "duration")
     Integer duration;

@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -27,5 +26,8 @@ public class Client {
 
     @Column(name = "address")
     String address;
+
+    @Column(name="inn")
+    String inn;
 
 }

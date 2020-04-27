@@ -19,8 +19,11 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "price")
-    BigDecimal price;
+    @Column(name = "valuation_price")
+    BigDecimal valuationPrice; //цена, которую дали оценщики банка
+
+    @Column(name="market_price")
+    BigDecimal marketPrice; //рыночная оценка
 
     @Column(name = "description")
     String description; // описание имущества
