@@ -3,6 +3,7 @@ package com.company.banksystem.controller;
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.models.CreditModel;
 import com.company.banksystem.service.CreditServiceImpl;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class CreditController {
     public Credit getById(@PathVariable("id")Long id){
         return creditService.getById(id);
     }
+    @SneakyThrows
     @PostMapping
     public ResponseEntity create(@RequestBody CreditModel creditModel) {
         Credit credit=creditService.create(creditModel);
