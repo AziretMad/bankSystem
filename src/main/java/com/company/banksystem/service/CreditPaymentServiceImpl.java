@@ -65,15 +65,13 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
             BigDecimal monthPercent = BigDecimal.valueOf(d);
             //Условие: сумма кредита — 1 000 000 рублей, срок — три года (36 месяцев), ставка — 20%.
             //1. Ставка по кредиту в месяц = годовая процентная ставка / 12 месяцев 20%/12 месяцев/100=0,017.
-            //
+            //                              action2             action3
             //2. Коэффициент аннуитета = (0,017*(1+0,017)^36/((1+0,017)^36—1)=0,037184.
             //
             //3. Ежемесячный аннуитетный платеж = 0,037184*1 000 000 рублей = 37 184 рубля.
             BigDecimal action1 = monthPercent.add(BigDecimal.valueOf(1)).pow(duration);
             BigDecimal action2 = action1.multiply(monthPercent);
-            System.out.println(action2);
             BigDecimal action3 = action1.subtract(BigDecimal.valueOf(1));
-            System.out.println(action3);
             BigDecimal coefficient = action2.divide(action3, 2);
             BigDecimal monthPayment = amount.multiply(coefficient).setScale(0, 0);
             return monthPayment;
