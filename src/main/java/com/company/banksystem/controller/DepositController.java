@@ -1,6 +1,7 @@
 package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.Deposit;
+import com.company.banksystem.models.DepositModel;
 import com.company.banksystem.service.DepositServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class DepositController {
     }
 
     @PostMapping
-    public Deposit create(@RequestBody Deposit deposit) {
+    public Deposit create(@RequestBody DepositModel deposit) throws Exception {
         return depositService.create(deposit);
     }
 

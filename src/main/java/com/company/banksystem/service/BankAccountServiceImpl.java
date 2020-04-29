@@ -24,7 +24,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccount bankAccount = BankAccount.builder().accountNumber(bankAccountModel.getAccountNumber())
                 .amount(bankAccountModel.getAmount())
                 .currency(bankAccountModel.getCurrency())
-                .dateOfCreation(bankAccountModel.getDateOfCreation())
+                .createdDate(bankAccountModel.getCreatedDate())
                 .status(bankAccountModel.getStatus())
                 .client(client)
                 .codeWord(bankAccountModel.getCodeWord())

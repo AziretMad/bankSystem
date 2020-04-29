@@ -3,6 +3,7 @@ package com.company.banksystem.controller;
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.actions.CreditPayment;
+import com.company.banksystem.models.actions.CreditPaymentModel;
 import com.company.banksystem.service.CreditPaymentServiceImpl;
 import com.company.banksystem.service.CreditServiceImpl;
 import com.company.banksystem.service.interfaces.CreditPaymentService;
@@ -31,8 +32,8 @@ public class CreditPaymentController {
     }
 
     @PostMapping
-    public CreditPayment create(@RequestBody CreditPayment creditPayment) {
-        return creditPaymentService.create(creditPayment);
+    public CreditPayment create(@RequestBody CreditPaymentModel creditPaymentModel) throws Exception{
+        return creditPaymentService.create(creditPaymentModel);
     }
 
     @DeleteMapping("/delete/{id}")
