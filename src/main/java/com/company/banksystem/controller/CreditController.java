@@ -26,7 +26,7 @@ public class CreditController {
     }
     @SneakyThrows
     @PostMapping
-    public ResponseEntity create(@RequestBody CreditModel creditModel) {
+    public ResponseEntity create(@RequestBody CreditModel creditModel) throws Exception {
         Credit credit=creditService.create(creditModel);
         return new ResponseEntity(credit, HttpStatus.OK);
     }

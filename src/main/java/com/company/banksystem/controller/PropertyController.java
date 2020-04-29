@@ -1,6 +1,7 @@
 package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.Property;
+import com.company.banksystem.models.PropertyModel;
 import com.company.banksystem.service.PropertyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class PropertyController {
     }
 
     @PostMapping
-    public Property create(@RequestBody Property bankAccount) {
-        return propertyService.create(bankAccount);
+    public Property create(@RequestBody PropertyModel propertyModel) throws Exception{
+        return propertyService.create(propertyModel);
     }
 
     @DeleteMapping("/delete/{id}")

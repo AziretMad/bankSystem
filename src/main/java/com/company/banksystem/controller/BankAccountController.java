@@ -24,7 +24,7 @@ public class BankAccountController {
         return bankAccountService.getById(id);
     }
     @PostMapping
-    public BankAccount create(@RequestBody BankAccountModel bankAccount){
+    public BankAccount create(@RequestBody BankAccountModel bankAccount) throws Exception{
         return bankAccountService.create(bankAccount);
     }
     @DeleteMapping("/delete/{id}")

@@ -19,7 +19,7 @@ public class BankAccountModel {
     String accountNumber;
     BigDecimal amount;
     Currency currency;
-    Date dateOfCreation;
+    Date createdDate;
     Date dateOfClosing;
     Status status;
     ClientModel clientModel;
