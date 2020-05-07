@@ -1,12 +1,12 @@
 package com.company.banksystem.models;
 
+import com.company.banksystem.entity.Client;
+import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
-import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,14 +15,9 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class DepositModel {
-    Long id;
-    String depositNumber;
     BigDecimal amount;
-    Double interestRate;
-    Date dateOfCreation;
-    Date dateOfClosing;
     Integer duration;
-    Status status;
     DepositType depositType;
-    ClientModel clientModel;
+    Client client;
+    Currency currency;
 }

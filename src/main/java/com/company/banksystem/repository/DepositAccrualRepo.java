@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DepositAccrualRepo extends JpaRepository<DepositAccrual,Long> {
+    DepositAccrual findAllByDeposit_Id(Long id);
 }
