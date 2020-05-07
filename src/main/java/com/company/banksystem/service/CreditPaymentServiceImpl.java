@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -53,14 +54,26 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
     }
 
     public static BigDecimal paymentCalculator(Credit credit){
-        BigDecimal percent = BigDecimal.valueOf(credit.getInterestRate());
-        BigDecimal amount = credit.getAmount();
-        BigDecimal duration = BigDecimal.valueOf(credit.getDuration());
-        BigDecimal monthPercent = percent.divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(12));
-        //Ежемесячный платеж = Сумма кредита × Ставка/ 1- (1 + Ставка)^ - Срок кредита
-        BigDecimal action1 = monthPercent.add(BigDecimal.valueOf(1)).pow(- credit.getDuration());
-        BigDecimal action2 = BigDecimal.valueOf(1).subtract(action1);
-        BigDecimal monthPayment = amount.multiply(monthPercent).divide(action2);
-        return null;
+            //Погашение осуществляется аннуитетными платежами.
+            Double percent = credit.getInterestRate()/100/12;
+            BigDecimal amount = credit.getAmount();
+            Integer duration = credit.getDuration();
+            DecimalFormat df = new DecimalFormat("###.###");
+            df.format(percent);
+            String s = df.format(percent).replace(',', '.');
+            Double d = Double.valueOf(s);
+            BigDecimal monthPercent = BigDecimal.valueOf(d);
+            //Условие: сумма кредита — 1 000 000 рублей, срок — три года (36 месяцев), ставка — 20%.
+            //1. Ставка по кредиту в месяц = годовая процентная ставка / 12 месяцев 20%/12 месяцев/100=0,017.
+            //                              action2             action3
+            //2. Коэффициент аннуитета = (0,017*(1+0,017)^36/((1+0,017)^36—1)=0,037184.
+            //
+            //3. Ежемесячный аннуитетный платеж = 0,037184*1 000 000 рублей = 37 184 рубля.
+            BigDecimal action1 = monthPercent.add(BigDecimal.valueOf(1)).pow(duration);
+            BigDecimal action2 = action1.multiply(monthPercent);
+            BigDecimal action3 = action1.subtract(BigDecimal.valueOf(1));
+            BigDecimal coefficient = action2.divide(action3, 2);
+            BigDecimal monthPayment = amount.multiply(coefficient).setScale(0, 0);
+            return monthPayment;
     }
 }
