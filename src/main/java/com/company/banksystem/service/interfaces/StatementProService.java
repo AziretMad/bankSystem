@@ -1,6 +1,6 @@
 package com.company.banksystem.service.interfaces;
 
-import com.company.banksystem.entity.StatementProcessing;
+import com.company.banksystem.entity.actions.StatementProcessing;
 import com.company.banksystem.enums.StatementType;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.exceptions.NotFoundStatement;

@@ -35,6 +35,7 @@ public class Deposit {
 
     @CreatedDate
     @Column(name = "created_date")
+    @Builder.Default
     Date createdDate=new Date();
 
     @Column(name = "closed_date")

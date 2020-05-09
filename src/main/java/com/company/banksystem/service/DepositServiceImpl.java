@@ -5,12 +5,12 @@ import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.exceptions.NotFoundClient;
-import com.company.banksystem.exceptions.WrongEnteredCurrency;
-import com.company.banksystem.exceptions.WrongEnteredDuration;
+import com.company.banksystem.exceptions.NotFoundInterestRate;
 import com.company.banksystem.models.DepositModel;
 import com.company.banksystem.repository.DepositRepo;
 import com.company.banksystem.service.interfaces.ClientService;
 import com.company.banksystem.service.interfaces.DepositService;
+import com.company.banksystem.service.interfaces.InterestRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +23,24 @@ public class DepositServiceImpl implements DepositService {
     private DepositRepo depositRepo;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private InterestRateService interestRateService;
 
     @Override
     public Deposit create(DepositModel depositModel) throws Exception {
         Client client = clientService.getById(depositModel.getClient().getId());
         if (client != null) {
+            Double interestRate = setInterestRate(depositModel);
             Deposit deposit = Deposit.builder()
                     .amount(depositModel.getAmount())
                     .duration(depositModel.getDuration())
                     .depositType(depositModel.getDepositType())
                     .client(client)
                     .status(Status.INACTIVE)
+                    .interestRate(interestRate)
                     .currency(depositModel.getCurrency())
                     .build();
-            //setInterestRate(deposit);
-            return depositRepo.save(setInterestRate(deposit));
+            return depositRepo.save(deposit);
         } else throw new NotFoundClient();
     }
 
@@ -62,8 +65,8 @@ public class DepositServiceImpl implements DepositService {
         return depositRepo.save(entity);
     }
 
-    @Override //our interest rate is fixed
-    public Deposit setInterestRate(Deposit deposit) throws Exception {
+    // @Override //our interest rate is fixed
+   /* public Deposit setInterestRate(Deposit deposit) throws Exception {
         Status status = deposit.getStatus();
         Integer duration = deposit.getDuration();
         Currency currency = deposit.getCurrency();
@@ -203,7 +206,11 @@ public class DepositServiceImpl implements DepositService {
 
         }
         return deposit;
+    }*/
+    @Override
+    public Double setInterestRate(DepositModel deposit) throws NotFoundInterestRate {
+        Currency currency = deposit.getCurrency();
+        Integer duration = deposit.getDuration();
+        return interestRateService.findByCurrencyAndDuration(currency, duration);
     }
-
-
 }

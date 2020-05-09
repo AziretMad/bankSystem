@@ -1,4 +1,4 @@
-package com.company.banksystem.entity;
+package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.enums.StatementType;
 import com.company.banksystem.enums.Status;

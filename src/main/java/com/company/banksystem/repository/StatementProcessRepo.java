@@ -1,6 +1,6 @@
 package com.company.banksystem.repository;
 
-import com.company.banksystem.entity.StatementProcessing;
+import com.company.banksystem.entity.actions.StatementProcessing;
 import com.company.banksystem.enums.StatementType;
 import com.company.banksystem.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;

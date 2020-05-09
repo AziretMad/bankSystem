@@ -6,6 +6,6 @@ public interface BaseService<T, J>{
     T create(J entity) throws Exception;
     T getById(Long id);
     List<T> getAll();
-    void delete(Long id);
+    void delete(Long id) ;
     T update(T entity);
 }

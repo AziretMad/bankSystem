@@ -33,6 +33,7 @@ public class DepositAccrual {
 
     @CreatedDate
     @Column(name = "date")
+    @Builder.Default
     Date date = new Date();
 
     @ManyToOne

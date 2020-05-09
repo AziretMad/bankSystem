@@ -2,7 +2,7 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.Deposit;
-import com.company.banksystem.entity.StatementProcessing;
+import com.company.banksystem.entity.actions.StatementProcessing;
 import com.company.banksystem.enums.StatementType;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.exceptions.NotFoundCredit;
