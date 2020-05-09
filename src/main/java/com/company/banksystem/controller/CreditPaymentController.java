@@ -18,9 +18,6 @@ public class CreditPaymentController {
     @Autowired
     private CreditPaymentServiceImpl creditPaymentService;
 
-    @Autowired
-    private CreditServiceImpl creditService;
-
     @GetMapping
     public List<CreditPayment> getAll() {
         return creditPaymentService.getAll();
