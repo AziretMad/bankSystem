@@ -26,6 +26,7 @@ public class Transaction {
 
     @CreatedDate
     @Column(name = "created_date")
+    @Builder.Default
     Date createdDate = new Date();
 
     @Column(name = "amount")

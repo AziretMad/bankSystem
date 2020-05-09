@@ -63,21 +63,23 @@ public class TransactionServiceImpl implements TransactionService {
     @SneakyThrows
     public Transaction confirmation(Confirmation confirmation, String codeWord) {
         Transaction transaction = getById(confirmation.getTransactionId());
-        if (!transaction.getCode().equals(confirmation.getConfirmationCode())) {
-            count++;
-            if (count > 3 && transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
-                transaction.setStatus(TransactionStatus.BLOCKED);
-            throw new WrongConfirmationCode();
-        }
-        if (!transaction.getAccountFrom().getCodeWord().equals(codeWord) &&
-                transaction.getStatus().equals(TransactionStatus.OK)) {
-            transaction.setStatus(TransactionStatus.FAIL);
-            throw new WrongKeyWordException();
-        }
-        if (transaction.getCode().equals(confirmation.getConfirmationCode())) {
-            if (transaction.getAccountFrom().getCodeWord().equals(codeWord)) {
-                if (transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
-                    transaction.setStatus(TransactionStatus.OK);
+        if (transaction != null) {
+            if (!transaction.getCode().equals(confirmation.getConfirmationCode())) {
+                count++;
+                if (count > 3 && transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
+                    transaction.setStatus(TransactionStatus.BLOCKED);
+                throw new WrongConfirmationCode();
+            }
+            if (!transaction.getAccountFrom().getCodeWord().equals(codeWord) &&
+                    transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS)) {
+                transaction.setStatus(TransactionStatus.FAIL);
+                throw new WrongKeyWordException();
+            }
+            if (transaction.getCode().equals(confirmation.getConfirmationCode())) {
+                if (transaction.getAccountFrom().getCodeWord().equals(codeWord)) {
+                    if (transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
+                        transaction.setStatus(TransactionStatus.OK);
+                }
             }
         }
         transactionFinallyProcess(transaction);
@@ -97,6 +99,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return transaction;
     }
+
 
     public static Integer getRandomCode() {
         Random r = new Random();

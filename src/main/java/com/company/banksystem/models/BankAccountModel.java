@@ -15,7 +15,6 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class BankAccountModel {
-    Long id;
     String accountNumber;
     BigDecimal amount;
     Currency currency;

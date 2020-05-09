@@ -1,10 +1,9 @@
 package com.company.banksystem.models.actions;
 
+import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Deposit;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -12,7 +11,8 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class DepositAccrualModel {
-    Integer id;
     Deposit deposit;
-    BigDecimal amount;
+    BankAccount bankAccount;
+    //because other properties we are generate
+
 }

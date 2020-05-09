@@ -1,5 +1,6 @@
 package com.company.banksystem.entity.actions;
 
+import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.enums.TransactionStatus;
 import lombok.*;
@@ -32,9 +33,17 @@ public class DepositAccrual {
 
     @CreatedDate
     @Column(name = "date")
+    @Builder.Default
     Date date = new Date();
+
+    @ManyToOne
+    @JoinColumn(name="bank_account")
+    BankAccount bankAccount;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name="status")
     TransactionStatus status;
+
+    @Column(name="code")
+    Integer code;
 }

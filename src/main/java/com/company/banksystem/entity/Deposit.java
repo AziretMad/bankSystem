@@ -1,5 +1,6 @@
 package com.company.banksystem.entity;
 
+import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
 import com.company.banksystem.enums.Status;
 import lombok.*;
@@ -34,13 +35,14 @@ public class Deposit {
 
     @CreatedDate
     @Column(name = "created_date")
+    @Builder.Default
     Date createdDate=new Date();
 
     @Column(name = "closed_date")
     Date closedDate;
 
     @Column(name = "duration")
-    Integer duration;
+    Integer duration;  //in months
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -53,4 +55,8 @@ public class Deposit {
     @ManyToOne
     @JoinColumn(name="client_id")
     Client client;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="currency")
+    Currency currency;
 }

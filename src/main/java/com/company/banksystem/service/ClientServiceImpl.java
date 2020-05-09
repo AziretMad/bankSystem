@@ -18,6 +18,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = Client.builder().fullName(clientModel.getFullName())
                 .address(clientModel.getAddress())
                 .telephone(clientModel.getTelephone())
+                .inn(clientModel.getInn())
                 .build();
         return clientRepo.save(client) ;
     }

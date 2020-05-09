@@ -32,6 +32,7 @@ public class CreditPayment {
 
     @CreatedDate
     @Column(name = "date")
+    @Builder.Default
     Date date=new Date();
 
     @Enumerated(value = EnumType.STRING)

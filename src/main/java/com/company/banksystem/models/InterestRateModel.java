@@ -1,5 +1,6 @@
 package com.company.banksystem.models;
 
+import com.company.banksystem.enums.Currency;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,10 +10,8 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class ClientModel {
-    Long Id;
-    String fullName;
-    String telephone;
-    String address;
-    String inn;
+public class InterestRateModel {
+    Integer duration;
+    Currency currency;
+    Double interestRate;
 }
