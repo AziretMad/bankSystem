@@ -42,8 +42,8 @@ public class InterestRateServiceImpl implements InterestRateService {
     }
 
     @Override
-    public Double findByCurrencyAndDuration(Currency currency, Integer duration) throws NotFoundInterestRate {
-        Double findInterestRate = rateRepository.findByCurrencyAndDuration(currency, duration);
+    public InterestRateDeposit findByCurrencyAndDuration(Currency currency, Integer duration) throws NotFoundInterestRate {
+        InterestRateDeposit findInterestRate = rateRepository.findByCurrencyAndDuration(currency, duration);
         if (findInterestRate != null)
             return findInterestRate;
         throw new NotFoundInterestRate();

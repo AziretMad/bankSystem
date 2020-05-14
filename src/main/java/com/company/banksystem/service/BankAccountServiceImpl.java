@@ -2,6 +2,7 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Client;
+import com.company.banksystem.enums.Status;
 import com.company.banksystem.exceptions.NotFoundClient;
 import com.company.banksystem.models.BankAccountModel;
 import com.company.banksystem.repository.BankAccountRepo;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
     @Autowired
@@ -21,11 +24,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccount create(BankAccountModel bankAccountModel) throws Exception{
         Client client = clientService.getById(bankAccountModel.getClientModel().getId());
         if(client!=null){
-        BankAccount bankAccount = BankAccount.builder().accountNumber(bankAccountModel.getAccountNumber())
+        BankAccount bankAccount = BankAccount.builder().accountNumber(generateBankAccountNumber())
                 .amount(bankAccountModel.getAmount())
                 .currency(bankAccountModel.getCurrency())
-                .createdDate(bankAccountModel.getCreatedDate())
-                .status(bankAccountModel.getStatus())
+                .status(Status.INACTIVE)
                 .client(client)
                 .codeWord(bankAccountModel.getCodeWord())
                 .build();
@@ -54,4 +56,29 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountRepo.save(entity);
     }
 
+    @Override
+    public String generateBankAccountNumber() {
+        Random r = new Random();
+        String depositNumber = "961452";//9-платежная система 61452 - идентификатор банка
+        int accountCode = r.nextInt((999999999 - 100000000) + 1) + 100000000;//идентификатор аккаунта
+        String number = depositNumber + String.valueOf(accountCode);
+        Integer luhn = luhnAlgorithm(number);
+        return number + luhn;
+    }
+
+    static Integer luhnAlgorithm(String code) {
+        int sum = 0;
+        for (int i = 0; i < code.length(); i++) {
+            int n = Integer.parseInt(code.substring(i, i + 1));
+            if (i % 2 == 0) {
+                n *= 2;
+                if (n > 9)
+                    n -= 9;
+            }
+            sum += n;
+        }
+        if (sum % 10 == 0)
+            return 0;
+        return 10 - (sum % 10);
+    }
 }

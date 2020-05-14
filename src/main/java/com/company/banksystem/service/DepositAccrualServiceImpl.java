@@ -35,8 +35,8 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
     @Override
     public DepositAccrual create(DepositAccrualModel entity) throws Exception {
         Deposit deposit = depositService.getById(entity.getDeposit().getId());
-        BankAccount bankAccount=bankAccountService.getById(entity.getBankAccount().getId());
-        if (deposit != null&&bankAccount!=null) {
+        BankAccount bankAccount = bankAccountService.getById(entity.getBankAccount().getId());
+        if (deposit != null && bankAccount != null) {
             DepositAccrual depositAccrual = DepositAccrual.builder()
                     .status(TransactionStatus.AWAITING_PROCESS)
                     .deposit(deposit).bankAccount(bankAccount)

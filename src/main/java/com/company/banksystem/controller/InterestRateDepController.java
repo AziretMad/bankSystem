@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "/interestRate")
+@RequestMapping("/interestRate")
 public class InterestRateDepController {
     @Autowired
     private InterestRateService rateService;
@@ -77,7 +77,7 @@ public class InterestRateDepController {
     @GetMapping("findByCurrency&Duration{currency}&{duration}")
     public ResponseEntity findInterestRate(@PathVariable("currency") Currency currency, @PathVariable("duration") Integer duration) {
         try {
-            Double findInterestRate = rateService.findByCurrencyAndDuration(currency, duration);
+            InterestRateDeposit findInterestRate = rateService.findByCurrencyAndDuration(currency, duration);
             return new ResponseEntity<>(findInterestRate, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);

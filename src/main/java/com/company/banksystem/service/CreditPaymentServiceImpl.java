@@ -102,7 +102,7 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
         return monthPayment;
     }
 
-    public BigDecimal paymentCalculator(Credit credit) {
+    public static BigDecimal paymentCalculator(Credit credit) {
         return null;
     }
 }

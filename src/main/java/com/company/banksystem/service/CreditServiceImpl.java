@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
+import static com.company.banksystem.service.BankAccountServiceImpl.luhnAlgorithm;
 
 @Service
 public class CreditServiceImpl implements CreditService {
@@ -24,7 +27,7 @@ public class CreditServiceImpl implements CreditService {
         Client client = clientService.getById(creditModel.getClientModel().getId());
         if (client != null) {
             Credit credit = Credit.builder()
-                    .creditNumber(creditModel.getCreditNumber())
+                    .creditNumber(generateCreditNumber())
                     .amount(creditModel.getAmount())
                     .interestRate(creditModel.getInterestRate())
                     .creditType(creditModel.getCreditType())
@@ -54,5 +57,19 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Credit update(Credit entity) {
         return creditRepo.save(entity);
+    }
+    @Override
+    public String generateCreditNumber() {
+        Random r = new Random();
+        String depositNumber = "247203";//2-платежная система 47203 - идентификатор банка
+        int accountCode = r.nextInt((999999999 - 100000000) + 1) + 100000000;//идентификатор аккаунта
+        String number = depositNumber + String.valueOf(accountCode);
+        Integer luhn = luhnAlgorithms(number);
+        return number + luhn;
+    }
+
+    @Override
+    public Integer luhnAlgorithms(String code) {
+        return luhnAlgorithm(code);
     }
 }

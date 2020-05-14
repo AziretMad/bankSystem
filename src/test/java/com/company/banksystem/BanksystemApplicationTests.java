@@ -2,11 +2,9 @@ package com.company.banksystem;
 
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.service.CreditPaymentServiceImpl;
-import com.company.banksystem.service.CreditServiceImpl;
+import com.company.banksystem.service.DepositServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Equals;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
@@ -41,6 +39,19 @@ class BanksystemApplicationTests {
 		BigDecimal neededAmount = BigDecimal.valueOf(38095);
 		boolean result = false;
 		if(amount == neededAmount) {
+			result = true;
+		}
+		assertTrue(result);
+	}
+
+	@Test
+	void testNumber(){
+		String number="564896576621235";
+		DepositServiceImpl depositService=new DepositServiceImpl();
+		Integer amount= depositService.luhnAlgorithms(number);
+		Integer neededAmount=2;
+		boolean result = false;
+		if(amount.equals(neededAmount) ) {
 			result = true;
 		}
 		assertTrue(result);
