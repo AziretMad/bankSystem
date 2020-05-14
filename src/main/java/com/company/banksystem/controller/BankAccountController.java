@@ -4,9 +4,10 @@ import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.models.BankAccountModel;
 import com.company.banksystem.service.BankAccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -16,19 +17,42 @@ public class BankAccountController {
     private BankAccountServiceImpl bankAccountService;
 
     @GetMapping
-    public List<BankAccount> getAll(){
-        return bankAccountService.getAll();
+    public ResponseEntity getAll() {
+        try {
+            List<BankAccount> list = bankAccountService.getAll();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
+
     @GetMapping("/{id}")
-    public BankAccount getById(@PathVariable("id")Long id){
-        return bankAccountService.getById(id);
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            BankAccount bankAccount = bankAccountService.getById(id);
+            return new ResponseEntity<>(bankAccount, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
+
     @PostMapping
-    public BankAccount create(@RequestBody BankAccountModel bankAccount) throws Exception{
-        return bankAccountService.create(bankAccount);
+    public ResponseEntity create(@RequestBody BankAccountModel bankAccount) {
+        try {
+            BankAccount bankAccount1 = bankAccountService.create(bankAccount);
+            return new ResponseEntity<>(bankAccount1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
+
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id")Long id){
-        bankAccountService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            bankAccountService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

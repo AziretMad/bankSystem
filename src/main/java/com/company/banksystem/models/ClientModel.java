@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class ClientModel {
-    Long Id;
     String fullName;
     String telephone;
     String address;

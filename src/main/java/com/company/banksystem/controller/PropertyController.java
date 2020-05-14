@@ -4,6 +4,8 @@ import com.company.banksystem.entity.Property;
 import com.company.banksystem.models.PropertyModel;
 import com.company.banksystem.service.PropertyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,23 +15,44 @@ import java.util.List;
 public class PropertyController {
     @Autowired
     private PropertyServiceImpl propertyService;
+
     @GetMapping
-    public List<Property> getAll() {
-        return propertyService.getAll();
+    public ResponseEntity getAll() {
+        try {
+            List<Property> list = propertyService.getAll();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public Property getById(@PathVariable("id") Long id) {
-        return propertyService.getById(id);
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            Property property = propertyService.getById(id);
+            return new ResponseEntity<>(property, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public Property create(@RequestBody PropertyModel propertyModel) throws Exception{
-        return propertyService.create(propertyModel);
+    public ResponseEntity create(@RequestBody PropertyModel propertyModel) throws Exception {
+        try {
+            Property property = propertyService.create(propertyModel);
+            return new ResponseEntity<>(property, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        propertyService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            propertyService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

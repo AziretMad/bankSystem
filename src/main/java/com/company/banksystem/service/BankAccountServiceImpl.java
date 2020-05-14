@@ -20,24 +20,25 @@ public class BankAccountServiceImpl implements BankAccountService {
     private BankAccountRepo bankAccountRepo;
     @Autowired
     private ClientServiceImpl clientService;
+
     @Override
-    public BankAccount create(BankAccountModel bankAccountModel) throws Exception{
-        Client client = clientService.getById(bankAccountModel.getClientModel().getId());
-        if(client!=null){
-        BankAccount bankAccount = BankAccount.builder().accountNumber(generateBankAccountNumber())
-                .amount(bankAccountModel.getAmount())
-                .currency(bankAccountModel.getCurrency())
-                .status(Status.INACTIVE)
-                .client(client)
-                .codeWord(bankAccountModel.getCodeWord())
-                .build();
-        return bankAccountRepo.save(bankAccount);}
-        else throw new NotFoundClient();
+    public BankAccount create(BankAccountModel bankAccountModel) throws Exception {
+        Client client = clientService.getById(bankAccountModel.getClient().getId());
+        if (client != null) {
+            BankAccount bankAccount = BankAccount.builder().accountNumber(generateBankAccountNumber())
+                    .amount(bankAccountModel.getAmount())
+                    .currency(bankAccountModel.getCurrency())
+                    .status(Status.INACTIVE)
+                    .client(client)
+                    .codeWord(bankAccountModel.getCodeWord())
+                    .build();
+            return bankAccountRepo.save(bankAccount);
+        } else throw new NotFoundClient();
     }
 
     @Override
     public BankAccount getById(Long id) {
-        Optional<BankAccount>bankAccount=bankAccountRepo.findById(id);
+        Optional<BankAccount> bankAccount = bankAccountRepo.findById(id);
         return bankAccount.get();
     }
 
@@ -48,7 +49,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void delete(Long id) {
-    bankAccountRepo.deleteById(id);
+        bankAccountRepo.deleteById(id);
     }
 
     @Override

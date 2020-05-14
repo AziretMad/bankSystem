@@ -40,8 +40,13 @@ public class StatementProcessController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) throws NotFoundStatement {
-        proService.deleteById(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) throws NotFoundStatement {
+        try {
+            proService.deleteById(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/getAllByStatementType/{type}")
@@ -53,13 +58,24 @@ public class StatementProcessController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
     @GetMapping("/getByAllStatus/{status}")
-    public ResponseEntity getAllByStatus(@PathVariable("status")Status status){
-        try{
-            List<StatementProcessing>list=proService.getAllByIsAccepted(status);
-            return new ResponseEntity<>(list,HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+    public ResponseEntity getAllByStatus(@PathVariable("status") Status status) {
+        try {
+            List<StatementProcessing> list = proService.getAllByIsAccepted(status);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("getById/{id}")
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            StatementProcessing getById = proService.getById(id);
+            return new ResponseEntity<>(getById, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -24,8 +24,8 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public Property create(PropertyModel propertyModel) throws Exception {
-        Client client = clientService.getById(propertyModel.getClientModel().getId());
-        Credit credit = creditService.getById(propertyModel.getCreditModel().getId());
+        Client client = clientService.getById(propertyModel.getClient().getId());
+        Credit credit = creditService.getById(propertyModel.getCredit().getId());
         if (client != null && credit != null) {
             Property property = Property.builder()
                     .marketPrice(propertyModel.getMarketPrice())

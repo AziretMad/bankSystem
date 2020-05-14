@@ -50,7 +50,4 @@ public class Transaction {
 
     @Column(name="code")
     Integer code;
-
-    @Column(name="receipt_number")
-    Long receipt_number;
 }

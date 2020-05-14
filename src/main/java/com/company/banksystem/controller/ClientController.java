@@ -4,6 +4,8 @@ import com.company.banksystem.entity.Client;
 import com.company.banksystem.models.ClientModel;
 import com.company.banksystem.service.ClientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,22 +17,42 @@ public class ClientController {
     private ClientServiceImpl clientService;
 
     @GetMapping
-    public List<Client> getAll() {
-        return clientService.getAll();
+    public ResponseEntity getAll() {
+        try {
+            List<Client> list = clientService.getAll();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public Client getById(@PathVariable("id") Long id) {
-        return clientService.getById(id);
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            Client client = clientService.getById(id);
+            return new ResponseEntity<>(client, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public Client create(@RequestBody ClientModel client) {
-        return clientService.create(client);
+    public ResponseEntity create(@RequestBody ClientModel client) {
+        try {
+            Client client1 = clientService.create(client);
+            return new ResponseEntity<>(client1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        clientService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            clientService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

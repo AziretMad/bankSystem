@@ -23,7 +23,7 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
 
     @Override
     public CreditPayment create(CreditPaymentModel entity) throws Exception{
-        Credit credit = creditService.getById(entity.getId());
+        Credit credit = creditService.getById(entity.getCredit().getId());
         if(credit!=null){
         CreditPayment creditPayment = CreditPayment.builder().amount(entity.getAmount())
                 .status(TransactionStatus.AWAITING_PROCESS)

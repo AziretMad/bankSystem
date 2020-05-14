@@ -24,7 +24,7 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(CreditModel creditModel) throws Exception {
-        Client client = clientService.getById(creditModel.getClientModel().getId());
+        Client client = clientService.getById(creditModel.getClient().getId());
         if (client != null) {
             Credit credit = Credit.builder()
                     .creditNumber(generateCreditNumber())
