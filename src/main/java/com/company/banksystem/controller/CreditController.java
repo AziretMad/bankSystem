@@ -24,7 +24,7 @@ public class CreditController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id")Long id){
         try {
             Credit credit = creditService.getById(id);
@@ -38,7 +38,7 @@ public class CreditController {
     public ResponseEntity create(@RequestBody CreditModel creditModel)  {
         try {
             Credit credit = creditService.create(creditModel);
-            return new ResponseEntity<>(credit, HttpStatus.OK);
+            return new ResponseEntity<>(credit, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -50,6 +50,15 @@ public class CreditController {
             return new ResponseEntity( HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping
+    public ResponseEntity update(@RequestBody Credit credit){
+        try {
+            Credit updated=creditService.update(credit);
+            return new ResponseEntity<>(updated,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

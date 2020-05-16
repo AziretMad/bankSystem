@@ -26,7 +26,7 @@ public class DepositController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             Deposit deposit = depositService.getById(id);
@@ -40,7 +40,7 @@ public class DepositController {
     public ResponseEntity create(@RequestBody DepositModel deposit) {
         try {
             Deposit deposit1 = depositService.create(deposit);
-            return new ResponseEntity<>(deposit1, HttpStatus.OK);
+            return new ResponseEntity<>(deposit1, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

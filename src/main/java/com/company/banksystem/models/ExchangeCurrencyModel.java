@@ -1,11 +1,8 @@
 package com.company.banksystem.models;
 
-import com.company.banksystem.entity.Client;
 import com.company.banksystem.enums.Currency;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,9 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class BankAccountModel {
-    BigDecimal amount;
+public class ExchangeCurrencyModel {
     Currency currency;
-    Client client;
-    String codeWord;
+    Double value;
 }

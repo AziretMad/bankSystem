@@ -26,7 +26,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             Client client = clientService.getById(id);
@@ -40,7 +40,7 @@ public class ClientController {
     public ResponseEntity create(@RequestBody ClientModel client) {
         try {
             Client client1 = clientService.create(client);
-            return new ResponseEntity<>(client1, HttpStatus.OK);
+            return new ResponseEntity<>(client1, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -53,6 +53,15 @@ public class ClientController {
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping
+    public ResponseEntity update(@RequestBody Client client){
+        try {
+            Client updated=clientService.update(client);
+            return new ResponseEntity<>(updated,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -26,7 +26,7 @@ public class PropertyController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             Property property = propertyService.getById(id);
@@ -40,7 +40,7 @@ public class PropertyController {
     public ResponseEntity create(@RequestBody PropertyModel propertyModel) throws Exception {
         try {
             Property property = propertyService.create(propertyModel);
-            return new ResponseEntity<>(property, HttpStatus.OK);
+            return new ResponseEntity<>(property, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -51,6 +51,15 @@ public class PropertyController {
         try {
             propertyService.delete(id);
             return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping
+    public ResponseEntity update(@RequestBody Property property) {
+        try {
+            Property updated = propertyService.update(property);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

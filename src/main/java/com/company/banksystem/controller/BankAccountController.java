@@ -26,7 +26,7 @@ public class BankAccountController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             BankAccount bankAccount = bankAccountService.getById(id);
@@ -40,7 +40,7 @@ public class BankAccountController {
     public ResponseEntity create(@RequestBody BankAccountModel bankAccount) {
         try {
             BankAccount bankAccount1 = bankAccountService.create(bankAccount);
-            return new ResponseEntity<>(bankAccount1, HttpStatus.OK);
+            return new ResponseEntity<>(bankAccount1, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -53,6 +53,15 @@ public class BankAccountController {
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping
+    public ResponseEntity update(@RequestBody BankAccount bankAccount){
+        try {
+            BankAccount updated=bankAccountService.update(bankAccount);
+            return new ResponseEntity<>(updated,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

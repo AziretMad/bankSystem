@@ -26,7 +26,7 @@ public class DepositAccrualController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             DepositAccrual depositAccrual = depositAccrualService.getById(id);
@@ -37,10 +37,10 @@ public class DepositAccrualController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody DepositAccrualModel accrualModel) throws Exception {
+    public ResponseEntity create(@RequestBody DepositAccrualModel accrualModel)  {
         try {
             DepositAccrual depositAccrual = depositAccrualService.create(accrualModel);
-            return new ResponseEntity<>(depositAccrual, HttpStatus.OK);
+            return new ResponseEntity<>(depositAccrual, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -67,7 +67,7 @@ public class DepositAccrualController {
     }
 
     @GetMapping("/calculate/{id}")
-    public ResponseEntity calculateAccrual(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity calculateAccrual(@PathVariable("id") Long id)  {
         try {
             DepositAccrual deposit1 = depositAccrualService.setAccrualByDepositType(id);
             return new ResponseEntity<>(deposit1, HttpStatus.OK);

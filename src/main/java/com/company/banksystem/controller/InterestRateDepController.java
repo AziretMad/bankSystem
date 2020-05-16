@@ -2,7 +2,6 @@ package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.InterestRateDeposit;
 import com.company.banksystem.enums.Currency;
-import com.company.banksystem.exceptions.NotFoundDeposit;
 import com.company.banksystem.models.InterestRateModel;
 import com.company.banksystem.service.interfaces.InterestRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class InterestRateDepController {
             List<InterestRateDeposit> all = rateService.getAll();
             return new ResponseEntity<>(all, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -34,14 +33,17 @@ public class InterestRateDepController {
             InterestRateDeposit statement = rateService.create(statementProcessing);
             return new ResponseEntity<>(statement, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) throws NotFoundDeposit {
-        rateService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity delete(@PathVariable("id") Long id)  {
+       try{ rateService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);}
+       catch (Exception e){
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+       }
     }
 
     @GetMapping("/getById/{id}")
@@ -50,7 +52,7 @@ public class InterestRateDepController {
             InterestRateDeposit interestRateDeposit = rateService.getById(id);
             return new ResponseEntity<>(interestRateDeposit, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -60,7 +62,7 @@ public class InterestRateDepController {
             List<InterestRateDeposit> findByCurrency = rateService.findAllByCurrency(currency);
             return new ResponseEntity<>(findByCurrency, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +72,7 @@ public class InterestRateDepController {
             List<InterestRateDeposit> findByDuration = rateService.findAllByDuration(duration);
             return new ResponseEntity<>(findByDuration, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -80,7 +82,7 @@ public class InterestRateDepController {
             InterestRateDeposit findInterestRate = rateService.findByCurrencyAndDuration(currency, duration);
             return new ResponseEntity<>(findInterestRate, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,7 +92,7 @@ public class InterestRateDepController {
             InterestRateDeposit interestRateDeposit = rateService.update(rateDeposit);
             return new ResponseEntity<>(interestRateDeposit, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
