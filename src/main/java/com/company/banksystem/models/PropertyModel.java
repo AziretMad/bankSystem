@@ -1,5 +1,7 @@
 package com.company.banksystem.models;
 
+import com.company.banksystem.entity.Client;
+import com.company.banksystem.entity.Credit;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,9 +14,8 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class PropertyModel {
-    Long id;
     BigDecimal marketPrice;
     String description;
-    ClientModel clientModel;
-    CreditModel creditModel;
+    Client client;
+    Credit credit;
 }

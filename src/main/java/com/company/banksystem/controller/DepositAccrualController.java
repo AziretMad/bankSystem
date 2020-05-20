@@ -4,6 +4,8 @@ import com.company.banksystem.entity.actions.DepositAccrual;
 import com.company.banksystem.models.actions.DepositAccrualModel;
 import com.company.banksystem.service.interfaces.DepositAccrualService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,32 +17,62 @@ public class DepositAccrualController {
     DepositAccrualService depositAccrualService;
 
     @GetMapping
-    public List<DepositAccrual> getAll() {
-        return depositAccrualService.getAll();
+    public ResponseEntity getAll() {
+        try {
+            List<DepositAccrual> all = depositAccrualService.getAll();
+            return new ResponseEntity<>(all, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping("/{id}")
-    public DepositAccrual getById(@PathVariable("id") Long id) {
-        return depositAccrualService.getById(id);
+    @GetMapping("/getById/{id}")
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            DepositAccrual depositAccrual = depositAccrualService.getById(id);
+            return new ResponseEntity<>(depositAccrual, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public DepositAccrual create(@RequestBody DepositAccrualModel accrualModel) throws Exception {
-        return depositAccrualService.create(accrualModel);
+    public ResponseEntity create(@RequestBody DepositAccrualModel accrualModel)  {
+        try {
+            DepositAccrual depositAccrual = depositAccrualService.create(accrualModel);
+            return new ResponseEntity<>(depositAccrual, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        depositAccrualService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            depositAccrualService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public DepositAccrual update(@PathVariable DepositAccrual deposit) {
-        return depositAccrualService.update(deposit);
+    public ResponseEntity update(@PathVariable DepositAccrual deposit) {
+        try {
+            DepositAccrual deposit1 = depositAccrualService.update(deposit);
+            return new ResponseEntity<>(deposit1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/calculate/{id}")
-    public DepositAccrual calculateAccrual(@PathVariable("id")Long id) throws Exception {
-        return depositAccrualService.setAccrualByDepositType(id);
+    public ResponseEntity calculateAccrual(@PathVariable("id") Long id)  {
+        try {
+            DepositAccrual deposit1 = depositAccrualService.setAccrualByDepositType(id);
+            return new ResponseEntity<>(deposit1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -1,8 +1,9 @@
 package com.company.banksystem.controller;
 
-import com.company.banksystem.entity.actions.CreditPayment;
-import com.company.banksystem.models.actions.CreditPaymentModel;
-import com.company.banksystem.service.CreditPaymentServiceImpl;
+import com.company.banksystem.entity.actions.Transaction;
+import com.company.banksystem.models.Confirmation;
+import com.company.banksystem.models.actions.TransactionModel;
+import com.company.banksystem.service.interfaces.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/creditPayment")
-public class CreditPaymentController {
+@RequestMapping("/transaction")
+public class TransactionController {
     @Autowired
-    private CreditPaymentServiceImpl creditPaymentService;
-
+    private TransactionService transactionService;
     @GetMapping
     public ResponseEntity getAll() {
         try {
-            List<CreditPayment> list = creditPaymentService.getAll();
+            List<Transaction> list = transactionService.getAll();
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -29,18 +29,18 @@ public class CreditPaymentController {
     @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
-            CreditPayment creditPayment = creditPaymentService.getById(id);
-            return new ResponseEntity<>(creditPayment, HttpStatus.OK);
+            Transaction transaction = transactionService.getById(id);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody CreditPaymentModel creditPaymentModel) throws Exception {
+    public ResponseEntity create(@RequestBody TransactionModel transactionModel)  {
         try {
-            CreditPayment creditPayment = creditPaymentService.create(creditPaymentModel);
-            return new ResponseEntity<>(creditPayment, HttpStatus.CREATED);
+            Transaction transaction = transactionService.create(transactionModel);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -49,17 +49,26 @@ public class CreditPaymentController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         try {
-            creditPaymentService.getById(id);
+            transactionService.delete(id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     @PutMapping
-    public ResponseEntity update(@RequestBody CreditPayment credit){
-        try {
-            CreditPayment updated=creditPaymentService.update(credit);
+    public ResponseEntity update(@RequestBody Transaction transaction){
+        try{
+            Transaction updated=transactionService.update(transaction);
             return new ResponseEntity<>(updated,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/confirmation")
+    public ResponseEntity confirmation(@RequestBody Confirmation confirmation,@RequestHeader String codeWord){
+        try{
+            Transaction transaction=transactionService.confirmation(confirmation,codeWord);
+            return new ResponseEntity<>(transaction,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

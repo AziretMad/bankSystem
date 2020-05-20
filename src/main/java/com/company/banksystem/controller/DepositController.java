@@ -26,7 +26,7 @@ public class DepositController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         try {
             Deposit deposit = depositService.getById(id);
@@ -37,17 +37,32 @@ public class DepositController {
     }
 
     @PostMapping
-    public Deposit create(@RequestBody DepositModel deposit) throws Exception {
-        return depositService.create(deposit);
+    public ResponseEntity create(@RequestBody DepositModel deposit) {
+        try {
+            Deposit deposit1 = depositService.create(deposit);
+            return new ResponseEntity<>(deposit1, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        depositService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            depositService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public Deposit update(@PathVariable Deposit deposit) {
-        return depositService.update(deposit);
+    public ResponseEntity update(@PathVariable Deposit deposit) {
+        try {
+            Deposit deposit1 = depositService.update(deposit);
+            return new ResponseEntity<>(deposit1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

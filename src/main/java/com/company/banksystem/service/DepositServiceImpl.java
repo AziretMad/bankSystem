@@ -2,6 +2,7 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Client;
 import com.company.banksystem.entity.Deposit;
+import com.company.banksystem.entity.InterestRateDeposit;
 import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.exceptions.NotFoundClient;
@@ -16,9 +17,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
+import static com.company.banksystem.service.BankAccountServiceImpl.luhnAlgorithm;
 
 @Service
 public class DepositServiceImpl implements DepositService {
+    private Random r = new Random();
     @Autowired
     private DepositRepo depositRepo;
     @Autowired
@@ -32,6 +37,7 @@ public class DepositServiceImpl implements DepositService {
         if (client != null) {
             Double interestRate = setInterestRate(depositModel);
             Deposit deposit = Deposit.builder()
+                    .depositNumber(generateDepositNumber())
                     .amount(depositModel.getAmount())
                     .duration(depositModel.getDuration())
                     .depositType(depositModel.getDepositType())
@@ -58,6 +64,21 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public void delete(Long id) {
         depositRepo.deleteById(id);
+    }
+
+    @Override
+    public String generateDepositNumber() {
+        Random r = new Random();
+        String depositNumber = "564896";//5-платежная система 64896 - идентификатор банка
+        int accountCode = r.nextInt((999999999 - 100000000) + 1) + 100000000;//идентификатор аккаунта
+        String number = depositNumber + String.valueOf(accountCode);
+        Integer luhn = luhnAlgorithms(number);
+        return number + luhn;
+    }
+
+    @Override
+    public Integer luhnAlgorithms(String code) {
+        return luhnAlgorithm(code);
     }
 
     @Override
@@ -211,6 +232,8 @@ public class DepositServiceImpl implements DepositService {
     public Double setInterestRate(DepositModel deposit) throws NotFoundInterestRate {
         Currency currency = deposit.getCurrency();
         Integer duration = deposit.getDuration();
-        return interestRateService.findByCurrencyAndDuration(currency, duration);
+        InterestRateDeposit interestRate=interestRateService.findByCurrencyAndDuration(currency,duration);
+        Double d=interestRate.getInterestRate();
+        return d;
     }
 }

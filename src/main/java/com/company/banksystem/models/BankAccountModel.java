@@ -1,12 +1,11 @@
 package com.company.banksystem.models;
 
+import com.company.banksystem.entity.Client;
 import com.company.banksystem.enums.Currency;
-import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,12 +14,8 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class BankAccountModel {
-    String accountNumber;
     BigDecimal amount;
     Currency currency;
-    Date createdDate;
-    Date dateOfClosing;
-    Status status;
-    ClientModel clientModel;
+    Client client;
     String codeWord;
 }

@@ -1,28 +1,36 @@
 package com.company.banksystem.service;
 
 import com.company.banksystem.entity.BankAccount;
+import com.company.banksystem.entity.ExchangeCurrency;
 import com.company.banksystem.entity.actions.Transaction;
+import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.TransactionStatus;
-import com.company.banksystem.exceptions.NotFoundAccount;
-import com.company.banksystem.exceptions.WrongConfirmationCode;
-import com.company.banksystem.exceptions.WrongKeyWordException;
+import com.company.banksystem.exceptions.*;
 import com.company.banksystem.models.Confirmation;
 import com.company.banksystem.models.actions.TransactionModel;
 import com.company.banksystem.repository.TransactionRepo;
+import com.company.banksystem.service.interfaces.ExchangeCurrencyService;
 import com.company.banksystem.service.interfaces.TransactionService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class TransactionServiceImpl implements TransactionService {
+@Service
+public class
+TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepo transactionRepo;
     @Autowired
     private BankAccountServiceImpl bankAccountService;
     private static int count = 0;
+
+    @Autowired
+    private ExchangeCurrencyService exchangeCurrencyService;
 
     @Override
     public Transaction create(TransactionModel entity) throws Exception {
@@ -60,8 +68,8 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepo.save(transaction);
     }
 
-    @SneakyThrows
-    public Transaction confirmation(Confirmation confirmation, String codeWord) {
+
+    public Transaction confirmation(Confirmation confirmation, String codeWord) throws Exception {
         Transaction transaction = getById(confirmation.getTransactionId());
         if (transaction != null) {
             if (!transaction.getCode().equals(confirmation.getConfirmationCode())) {
@@ -81,17 +89,54 @@ public class TransactionServiceImpl implements TransactionService {
                         transaction.setStatus(TransactionStatus.OK);
                 }
             }
-        }
-        transactionFinallyProcess(transaction);
-        return transaction;
+        } else throw new NotFoundTransaction();
+
+        return update(transactionFinallyProcess(transaction));
     }
 
-    public Transaction transactionFinallyProcess(Transaction transaction) {
+    private Transaction transactionFinallyProcess(Transaction transaction) throws NotFoundCurrency {
         if (transaction.getStatus().equals(TransactionStatus.OK)) {
+            Currency accountToCurrency = transaction.getAccountTo().getCurrency();
+            ExchangeCurrency exchangeCurrency;
+            Currency accountFromCurrency = transaction.getAccountFrom().getCurrency();
+            Currency currency = transaction.getCurrency();
             BankAccount accountFrom = bankAccountService.getById(transaction.getAccountFrom().getId());
-            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
             BankAccount accountTo = bankAccountService.getById(transaction.getAccountTo().getId());
-            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount()));
+
+            BigDecimal exchangeValue;
+
+            if (accountFromCurrency.equals(accountToCurrency)) {
+                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount()));
+
+
+            } else if (accountFromCurrency.equals(currency) && currency.equals(Currency.KGS)) {
+                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountToCurrency);
+                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().divide(exchangeValue, RoundingMode.HALF_UP)));
+
+
+            } else if (accountToCurrency.equals(Currency.KGS)) {
+                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
+                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().multiply(exchangeValue)));
+
+            } else {
+                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
+                ExchangeCurrency exchangeCurrencyTo = exchangeCurrencyService.getByCurrency(accountTo.getCurrency());
+                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+                BigDecimal exchangeCurrencyToValue = new BigDecimal(exchangeCurrencyTo.getValue());
+
+                BigDecimal convertToSom = transaction.getAmount().multiply(exchangeValue);
+                BigDecimal convertToAnotherCurrency = convertToSom.divide(exchangeCurrencyToValue, RoundingMode.HALF_UP);
+
+                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+                accountTo.setAmount(accountTo.getAmount().add(convertToAnotherCurrency));
+            }
+
+
             bankAccountService.update(accountFrom);
             bankAccountService.update(accountTo);
             transaction.setAccountFrom(accountFrom);
@@ -107,4 +152,17 @@ public class TransactionServiceImpl implements TransactionService {
         return result;
     }
 
+ /*   public Transaction exchangeCurrency(Transaction transaction) throws NotFoundCurrency {
+        Currency accountTo = transaction.getAccountTo().getCurrency();
+        ExchangeCurrency exchangeCurrency;
+        Currency accountFrom = transaction.getAccountFrom().getCurrency();
+        Currency currency = transaction.getCurrency();
+        if (accountFrom.equals(currency) && accountTo.equals(currency)) {
+            return transactionFinallyProcess(transaction);
+        } else if (accountFrom.equals(currency)&&currency.equals(Currency.KGS)) {
+            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountTo);
+            transaction.setAmount(transaction.getAmount().multiply(exchangeCurrency.getValue()));
+            return transactionFinallyProcess(transaction);
+        }
+    }*/
 }

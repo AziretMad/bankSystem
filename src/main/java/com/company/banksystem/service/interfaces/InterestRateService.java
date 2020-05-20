@@ -10,5 +10,5 @@ import java.util.List;
 public interface InterestRateService extends BaseService<InterestRateDeposit, InterestRateModel> {
     List<InterestRateDeposit> findAllByCurrency(Currency currency) throws NotFoundInterestRate;
     List<InterestRateDeposit>findAllByDuration(Integer duration) throws NotFoundInterestRate;
-    Double findByCurrencyAndDuration(Currency currency,Integer duration) throws NotFoundInterestRate;
+    InterestRateDeposit findByCurrencyAndDuration(Currency currency,Integer duration) throws NotFoundInterestRate;
 }

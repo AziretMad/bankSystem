@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StatementProServiceImpl implements StatementProService {
     @Autowired
@@ -67,7 +69,9 @@ public class StatementProServiceImpl implements StatementProService {
     }
 
     @Override
-    public StatementProcessing getById(Long id) {
-        return null;
+    public StatementProcessing getById(Long id)
+    {
+        Optional<StatementProcessing>processing=processRepo.findById(id);
+        return processing.orElse(new StatementProcessing());
     }
 }

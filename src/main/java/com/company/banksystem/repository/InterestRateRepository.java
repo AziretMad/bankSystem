@@ -11,5 +11,5 @@ import java.util.List;
 public interface InterestRateRepository extends JpaRepository<InterestRateDeposit,Long> {
     List<InterestRateDeposit> findAllByCurrency(Currency currency);
     List<InterestRateDeposit>findAllByDuration(Integer duration);
-    Double findByCurrencyAndDuration(Currency currency,Integer duration);
+    InterestRateDeposit findByCurrencyAndDuration( Currency currency,  Integer duration);
 }
