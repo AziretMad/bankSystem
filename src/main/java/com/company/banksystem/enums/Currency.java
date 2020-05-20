@@ -5,7 +5,7 @@ public enum Currency {
     EUR,
     RUB,
     KGS,
-    GBH,
+    GBP,
     JPY;
 
     Currency() {

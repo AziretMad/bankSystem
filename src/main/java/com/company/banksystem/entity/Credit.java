@@ -53,5 +53,5 @@ public class Credit {
 
     @Enumerated
     @Column(name="creditType")
-    CreditPaymentType creditType;
+    CreditPaymentType paymentType;
 }

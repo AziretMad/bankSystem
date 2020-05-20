@@ -6,6 +6,7 @@ import com.company.banksystem.entity.actions.CreditPayment;
 import com.company.banksystem.models.actions.CreditPaymentModel;
 import com.company.banksystem.service.CreditPaymentServiceImpl;
 import com.company.banksystem.service.CreditServiceImpl;
+import com.company.banksystem.service.PaymentCalculatorService;
 import com.company.banksystem.service.interfaces.CreditPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ import java.util.List;
 public class CreditPaymentController {
     @Autowired
     private CreditPaymentServiceImpl creditPaymentService;
+    @Autowired
+    private PaymentCalculatorService paymentCalculatorService;
 
     @GetMapping
     public List<CreditPayment> getAll() {

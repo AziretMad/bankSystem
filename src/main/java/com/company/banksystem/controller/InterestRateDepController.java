@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "/interestRate")
+@RequestMapping("/interestRate")
 public class InterestRateDepController {
     @Autowired
     private InterestRateService rateService;

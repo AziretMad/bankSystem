@@ -18,6 +18,6 @@ public class CreditModel {
     BigDecimal amount;
     Double interestRate;
     Integer duration;
-    ClientModel clientModel;
+    Long clientModelId;
     CreditPaymentType creditType;
 }

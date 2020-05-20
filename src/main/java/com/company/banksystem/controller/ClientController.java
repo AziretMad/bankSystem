@@ -14,7 +14,7 @@ public class ClientController {
     @Autowired
     private ClientServiceImpl clientService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Client> getAll() {
         return clientService.getAll();
     }
@@ -24,7 +24,7 @@ public class ClientController {
         return clientService.getById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public Client create(@RequestBody ClientModel client) {
         return clientService.create(client);
     }
