@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "client_roles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

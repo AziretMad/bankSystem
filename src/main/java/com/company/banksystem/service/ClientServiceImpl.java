@@ -19,6 +19,7 @@ public class ClientServiceImpl implements ClientService {
                 .address(clientModel.getAddress())
                 .telephone(clientModel.getTelephone())
                 .inn(clientModel.getInn())
+                .password(clientModel.getPassword())
                 .build();
         return clientRepo.save(client) ;
     }

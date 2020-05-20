@@ -29,4 +29,7 @@ public class Client {
 
     @Column(name="inn")
     String inn;
+
+    @Column(name = "password")
+    String password;
 }
