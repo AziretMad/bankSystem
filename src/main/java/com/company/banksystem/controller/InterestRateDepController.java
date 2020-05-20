@@ -17,7 +17,7 @@ public class InterestRateDepController {
     @Autowired
     private InterestRateService rateService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<InterestRateDeposit> all = rateService.getAll();
@@ -27,7 +27,7 @@ public class InterestRateDepController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody InterestRateModel statementProcessing) {
         try {
             InterestRateDeposit statement = rateService.create(statementProcessing);
@@ -76,7 +76,7 @@ public class InterestRateDepController {
         }
     }
 
-    @GetMapping("findByCurrency&Duration{currency}&{duration}")
+    @GetMapping("/findByCurrency&Duration{currency}&{duration}")
     public ResponseEntity findInterestRate(@PathVariable("currency") Currency currency, @PathVariable("duration") Integer duration) {
         try {
             InterestRateDeposit findInterestRate = rateService.findByCurrencyAndDuration(currency, duration);
@@ -86,7 +86,7 @@ public class InterestRateDepController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody InterestRateDeposit rateDeposit) {
         try {
             InterestRateDeposit interestRateDeposit = rateService.update(rateDeposit);

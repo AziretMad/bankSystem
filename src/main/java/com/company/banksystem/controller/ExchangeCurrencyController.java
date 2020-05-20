@@ -17,7 +17,7 @@ public class ExchangeCurrencyController {
     @Autowired
     private ExchangeCurrencyService currencyService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll(){
         try{
             List<ExchangeCurrency> all=currencyService.getAll();
@@ -26,7 +26,7 @@ public class ExchangeCurrencyController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody ExchangeCurrencyModel model){
         try{
             ExchangeCurrency exchangeCurrency=currencyService.create(model);
@@ -35,7 +35,7 @@ public class ExchangeCurrencyController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody ExchangeCurrency exchangeCurrency){
         try{
             ExchangeCurrency updated=currencyService.update(exchangeCurrency);

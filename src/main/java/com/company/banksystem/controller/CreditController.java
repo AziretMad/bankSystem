@@ -15,7 +15,7 @@ import java.util.List;
 public class CreditController {
     @Autowired
     private CreditServiceImpl creditService;
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity getAll(){
         try {
             List<Credit> list = creditService.getAll();
@@ -34,7 +34,7 @@ public class CreditController {
         }
     }
 
-    @PostMapping
+    @PostMapping("add")
     public ResponseEntity create(@RequestBody CreditModel creditModel)  {
         try {
             Credit credit = creditService.create(creditModel);
@@ -52,7 +52,7 @@ public class CreditController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("update")
     public ResponseEntity update(@RequestBody Credit credit){
         try {
             Credit updated=creditService.update(credit);
