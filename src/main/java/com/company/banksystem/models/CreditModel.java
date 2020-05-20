@@ -1,6 +1,5 @@
 package com.company.banksystem.models;
 
-import com.company.banksystem.entity.Client;
 import com.company.banksystem.enums.CreditPaymentType;
 import com.company.banksystem.enums.Currency;
 import lombok.*;
@@ -15,10 +14,12 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class CreditModel {
+    Long id;
+    String creditNumber;
     BigDecimal amount;
     Double interestRate;
     Integer duration;
-    Client client;
+    Long clientModelId;
     CreditPaymentType creditType;
     Currency currency;
 }

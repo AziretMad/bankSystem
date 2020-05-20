@@ -16,7 +16,7 @@ public class PropertyController {
     @Autowired
     private PropertyServiceImpl propertyService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<Property> list = propertyService.getAll();
@@ -36,7 +36,7 @@ public class PropertyController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody PropertyModel propertyModel) throws Exception {
         try {
             Property property = propertyService.create(propertyModel);
@@ -55,7 +55,7 @@ public class PropertyController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody Property property) {
         try {
             Property updated = propertyService.update(property);

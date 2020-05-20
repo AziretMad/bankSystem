@@ -16,7 +16,7 @@ public class CreditPaymentController {
     @Autowired
     private CreditPaymentServiceImpl creditPaymentService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<CreditPayment> list = creditPaymentService.getAll();
@@ -36,7 +36,7 @@ public class CreditPaymentController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody CreditPaymentModel creditPaymentModel) throws Exception {
         try {
             CreditPayment creditPayment = creditPaymentService.create(creditPaymentModel);
@@ -55,7 +55,7 @@ public class CreditPaymentController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody CreditPayment credit){
         try {
             CreditPayment updated=creditPaymentService.update(credit);

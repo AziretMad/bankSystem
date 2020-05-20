@@ -4,29 +4,26 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "client")
+@Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Client {
+public class ClientRoles {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "full_name")
-    String fullName;
+    @NotNull
+    @Column(name = "role_name", unique = true)
+    String RoleName;
 
-    @Column(name = "telephone")
-    String telephone;
-
-    @Column(name = "address")
-    String address;
-
-    @Column(name="inn")
-    String inn;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    Client client;
 }

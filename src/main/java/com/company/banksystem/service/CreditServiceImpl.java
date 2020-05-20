@@ -2,9 +2,7 @@ package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Client;
 import com.company.banksystem.entity.Credit;
-import com.company.banksystem.enums.Currency;
 import com.company.banksystem.exceptions.NotFoundClient;
-import com.company.banksystem.exceptions.NotFoundInterestRate;
 import com.company.banksystem.models.CreditModel;
 import com.company.banksystem.repository.CreditRepo;
 import com.company.banksystem.service.interfaces.CreditService;
@@ -26,21 +24,19 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(CreditModel creditModel) throws Exception {
-        Client client = clientService.getById(creditModel.getClient().getId());
+        Client client = clientService.getById(creditModel.getClientModelId());
         if (client != null) {
             Credit credit = Credit.builder()
                     .creditNumber(generateCreditNumber())
                     .amount(creditModel.getAmount())
-                    .interestRate(setInterestCredit(creditModel))
-                    .creditType(creditModel.getCreditType())
+                    .interestRate(creditModel.getInterestRate())
+                    .paymentType(creditModel.getCreditType())
                     .duration(creditModel.getDuration())
                     .client(client)
-                    .currency(creditModel.getCurrency())
                     .build();
             return creditRepo.save(credit);
-        } else throw new NotFoundClient();
+        }else throw  new NotFoundClient();
     }
-
 
     @Override
     public Credit getById(Long id) {
@@ -76,28 +72,5 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Integer luhnAlgorithms(String code) {
         return luhnAlgorithm(code);
-    }
-
-    private Double setInterestCredit(CreditModel credit) throws NotFoundInterestRate {
-        Currency currency = credit.getCurrency();
-        switch (currency) {
-            case KGS: {
-                return 25.0;
-            }
-            case USD:
-            case EUR: {
-                return 14.0;
-            }
-            case RUB: {
-                return 21.5;
-            }
-            case GBH:
-            case JPY: {
-                return 16.5;
-            }
-            default:
-                throw new NotFoundInterestRate();
-        }
-
     }
 }

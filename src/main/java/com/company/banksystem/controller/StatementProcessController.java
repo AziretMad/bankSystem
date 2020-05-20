@@ -18,7 +18,7 @@ public class StatementProcessController {
     @Autowired
     private StatementProService proService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<StatementProcessing> all = proService.getAll();
@@ -28,7 +28,7 @@ public class StatementProcessController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody StatementProcessing statementProcessing) {
         try {
             StatementProcessing statement = proService.create(statementProcessing);

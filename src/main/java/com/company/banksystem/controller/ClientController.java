@@ -16,7 +16,7 @@ public class ClientController {
     @Autowired
     private ClientServiceImpl clientService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<Client> list = clientService.getAll();
@@ -36,7 +36,7 @@ public class ClientController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody ClientModel client) {
         try {
             Client client1 = clientService.create(client);
@@ -55,7 +55,7 @@ public class ClientController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody Client client){
         try {
             Client updated=clientService.update(client);

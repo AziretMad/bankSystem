@@ -16,7 +16,7 @@ public class DepositController {
     @Autowired
     private DepositService depositService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<Deposit> depositList = depositService.getAll();
@@ -36,7 +36,7 @@ public class DepositController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody DepositModel deposit) {
         try {
             Deposit deposit1 = depositService.create(deposit);
@@ -56,7 +56,7 @@ public class DepositController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@PathVariable Deposit deposit) {
         try {
             Deposit deposit1 = depositService.update(deposit);

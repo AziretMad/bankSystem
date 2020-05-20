@@ -16,7 +16,7 @@ import java.util.List;
 public class TransactionController {
     @Autowired
     private TransactionService transactionService;
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity getAll() {
         try {
             List<Transaction> list = transactionService.getAll();
@@ -36,7 +36,7 @@ public class TransactionController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity create(@RequestBody TransactionModel transactionModel)  {
         try {
             Transaction transaction = transactionService.create(transactionModel);
@@ -55,7 +55,7 @@ public class TransactionController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody Transaction transaction){
         try{
             Transaction updated=transactionService.update(transaction);
