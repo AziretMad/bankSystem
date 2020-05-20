@@ -15,6 +15,7 @@ import com.company.banksystem.service.interfaces.StatementProService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,16 @@ public class StatementProServiceImpl implements StatementProService {
             Credit credit = creditService.getById(statement.getStatementId());
             if (credit != null) {
                 credit.setStatus(statement.getStatus());
+                if (statement.getStatus().equals(Status.CLOSED))
+                    credit.setClosedDate(new Date());
             } else throw new NotFoundCredit();
 
         } else if (type.equals(StatementType.DEPOSIT)) {
             Deposit deposit = depositService.getById(statement.getStatementId());
             if (deposit != null) {
                 deposit.setStatus(statement.getStatus());
+                if (statement.getStatus().equals(Status.CLOSED))
+                    deposit.setClosedDate(new Date());
             } else throw new NotFoundDeposit();
         }
         return processRepo.save(statement);
@@ -69,9 +74,8 @@ public class StatementProServiceImpl implements StatementProService {
     }
 
     @Override
-    public StatementProcessing getById(Long id)
-    {
-        Optional<StatementProcessing>processing=processRepo.findById(id);
+    public StatementProcessing getById(Long id) {
+        Optional<StatementProcessing> processing = processRepo.findById(id);
         return processing.orElse(new StatementProcessing());
     }
 }

@@ -43,7 +43,4 @@ public class DepositAccrual {
     @Enumerated(value = EnumType.STRING)
     @Column(name="status")
     TransactionStatus status;
-
-    @Column(name="code")
-    Integer code;
 }

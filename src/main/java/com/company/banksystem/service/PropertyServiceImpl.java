@@ -10,6 +10,8 @@ import com.company.banksystem.service.interfaces.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +58,10 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Property update(Property entity) {
         return propertyRepo.save(entity);
+    }
+
+    public BigDecimal setValuationPrice(BigDecimal marketPrice) {
+        BigDecimal valuationPrice = marketPrice.subtract(marketPrice.multiply(new BigDecimal(0.18), MathContext.DECIMAL32));
+        return valuationPrice;
     }
 }

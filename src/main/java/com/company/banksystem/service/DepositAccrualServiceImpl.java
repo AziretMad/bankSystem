@@ -7,8 +7,6 @@ import com.company.banksystem.enums.DepositType;
 import com.company.banksystem.enums.TransactionStatus;
 import com.company.banksystem.exceptions.NotFoundBankAccount;
 import com.company.banksystem.exceptions.NotFoundDeposit;
-import com.company.banksystem.exceptions.WrongConfirmationCode;
-import com.company.banksystem.models.Confirmation;
 import com.company.banksystem.models.actions.DepositAccrualModel;
 import com.company.banksystem.repository.DepositAccrualRepo;
 import com.company.banksystem.service.interfaces.BankAccountService;
@@ -68,7 +66,7 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
 
     @Override
     public DepositAccrual findByDepositId(Long id) {
-        return depositAccrualRepo.findAllByDeposit_Id(id);
+        return depositAccrualRepo.getByDepositId(id);
     }
 
     @Override
@@ -76,27 +74,26 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
         Deposit deposit = depositService.getById(depositId);
         if (deposit != null) {
             DepositType depositType = deposit.getDepositType();
-            DepositAccrual depositAccrual = findByDepositId(deposit.getId());
+            DepositAccrual depositAccrual = findByDepositId(depositId);
             BankAccount bankAccount = bankAccountService.getById(depositAccrual.getBankAccount().getId());
-            switch (depositType) {
-                case SAVINGS:
-                case DEMAND:
-                    //'cause accrued interest is added to the principal amount
-                    BigDecimal action = accrualCalculate(deposit).add(deposit.getAmount());
-                    depositAccrual.getDeposit().setAmount(action);
-                    depositAccrual.setAmount(accrualCalculate(deposit));
-                    depositAccrual.setStatus(TransactionStatus.OK);
-                    break;
-                case CUMULATIVE:
-                    if (bankAccount != null) {
-                        //accrued interest is added to other bank account
-                        bankAccount.setAmount(bankAccount.getAmount().add(accrualCalculate(deposit)));
-                        depositAccrual.setStatus(TransactionStatus.OK);
+                switch (depositType) {
+                    case SAVINGS:
+                    case DEMAND:
+                        //'cause accrued interest is added to the principal amount
+                        BigDecimal action = accrualCalculate(deposit).add(deposit.getAmount());
+                        depositAccrual.getDeposit().setAmount(action);
                         depositAccrual.setAmount(accrualCalculate(deposit));
-                    }
-                    throw new NotFoundBankAccount();
-            }
-
+                        depositAccrual.setStatus(TransactionStatus.OK);
+                        break;
+                    case CUMULATIVE:
+                        if (bankAccount != null) {
+                            //accrued interest is added to other bank account
+                            bankAccount.setAmount(bankAccount.getAmount().add(accrualCalculate(deposit)));
+                            depositAccrual.setStatus(TransactionStatus.OK);
+                            depositAccrual.setAmount(accrualCalculate(deposit));
+                        } else
+                        throw new NotFoundBankAccount();
+                }
             return depositAccrual;
         } else throw new NotFoundDeposit();
     }
@@ -111,15 +108,6 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
                 .divide(BigDecimal.valueOf(366), 0, RoundingMode.HALF_DOWN)
                 .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_DOWN);
         return action;
-    }
-
-    public DepositAccrual confirmationDeposit(Confirmation confirmation) throws Exception {
-        DepositAccrual depositAccrual = getById(confirmation.getTransactionId());
-        if (depositAccrual != null) {
-            if (depositAccrual.getCode().equals(confirmation.getConfirmationCode()))
-                return setAccrualByDepositType(depositAccrual.getDeposit().getId());
-            else throw new WrongConfirmationCode();
-        } else throw new NotFoundDeposit();
     }
 
 }

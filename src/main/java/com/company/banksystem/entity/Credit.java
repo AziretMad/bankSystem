@@ -1,5 +1,6 @@
 package com.company.banksystem.entity;
 
+import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.enums.CreditPaymentType;
 import lombok.*;
@@ -54,4 +55,8 @@ public class Credit {
     @Enumerated
     @Column(name="creditType")
     CreditPaymentType creditType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="currency")
+    Currency currency;
 }

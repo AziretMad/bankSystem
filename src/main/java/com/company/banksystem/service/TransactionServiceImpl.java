@@ -21,8 +21,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-public class
-TransactionServiceImpl implements TransactionService {
+public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepo transactionRepo;
     @Autowired
@@ -96,46 +95,9 @@ TransactionServiceImpl implements TransactionService {
 
     private Transaction transactionFinallyProcess(Transaction transaction) throws NotFoundCurrency {
         if (transaction.getStatus().equals(TransactionStatus.OK)) {
-            Currency accountToCurrency = transaction.getAccountTo().getCurrency();
-            ExchangeCurrency exchangeCurrency;
-            Currency accountFromCurrency = transaction.getAccountFrom().getCurrency();
-            Currency currency = transaction.getCurrency();
-            BankAccount accountFrom = bankAccountService.getById(transaction.getAccountFrom().getId());
-            BankAccount accountTo = bankAccountService.getById(transaction.getAccountTo().getId());
-
-            BigDecimal exchangeValue;
-
-            if (accountFromCurrency.equals(accountToCurrency)) {
-                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount()));
-
-
-            } else if (accountFromCurrency.equals(currency) && currency.equals(Currency.KGS)) {
-                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountToCurrency);
-                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().divide(exchangeValue, RoundingMode.HALF_UP)));
-
-
-            } else if (accountToCurrency.equals(Currency.KGS)) {
-                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
-                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-                accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().multiply(exchangeValue)));
-
-            } else {
-                exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
-                ExchangeCurrency exchangeCurrencyTo = exchangeCurrencyService.getByCurrency(accountTo.getCurrency());
-                exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-                BigDecimal exchangeCurrencyToValue = new BigDecimal(exchangeCurrencyTo.getValue());
-
-                BigDecimal convertToSom = transaction.getAmount().multiply(exchangeValue);
-                BigDecimal convertToAnotherCurrency = convertToSom.divide(exchangeCurrencyToValue, RoundingMode.HALF_UP);
-
-                accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-                accountTo.setAmount(accountTo.getAmount().add(convertToAnotherCurrency));
-            }
-
+            Transaction transaction1=exchangeCurrency(transaction);
+            BankAccount accountFrom = bankAccountService.getById(transaction1.getAccountFrom().getId());
+            BankAccount accountTo = bankAccountService.getById(transaction1.getAccountTo().getId());
 
             bankAccountService.update(accountFrom);
             bankAccountService.update(accountTo);
@@ -145,24 +107,42 @@ TransactionServiceImpl implements TransactionService {
         return transaction;
     }
 
-
-    public static Integer getRandomCode() {
+    private static Integer getRandomCode() {
         Random r = new Random();
         Integer result = r.nextInt((9999 - 1000) + 1) + 1000;
         return result;
     }
 
- /*   public Transaction exchangeCurrency(Transaction transaction) throws NotFoundCurrency {
-        Currency accountTo = transaction.getAccountTo().getCurrency();
+    private Transaction exchangeCurrency(Transaction transaction) throws NotFoundCurrency {
+        Currency accountFromCurrency = transaction.getAccountFrom().getCurrency();
+        Currency accountToCurrency = transaction.getAccountTo().getCurrency();
+        BankAccount accountFrom = bankAccountService.getById(transaction.getAccountFrom().getId());
+        BankAccount accountTo = bankAccountService.getById(transaction.getAccountTo().getId());
         ExchangeCurrency exchangeCurrency;
-        Currency accountFrom = transaction.getAccountFrom().getCurrency();
-        Currency currency = transaction.getCurrency();
-        if (accountFrom.equals(currency) && accountTo.equals(currency)) {
-            return transactionFinallyProcess(transaction);
-        } else if (accountFrom.equals(currency)&&currency.equals(Currency.KGS)) {
-            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountTo);
-            transaction.setAmount(transaction.getAmount().multiply(exchangeCurrency.getValue()));
-            return transactionFinallyProcess(transaction);
+        BigDecimal exchangeValue;
+        if (accountFromCurrency.equals(accountToCurrency)) {
+            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount()));
+        } else if (accountFromCurrency.equals(Currency.KGS)) {
+            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountToCurrency);
+            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().divide(exchangeValue, RoundingMode.HALF_UP)));
+        } else if (accountToCurrency.equals(Currency.KGS)) {
+            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
+            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().multiply(exchangeValue)));
+        } else {
+            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
+            ExchangeCurrency exchangeCurrencyTo = exchangeCurrencyService.getByCurrency(accountTo.getCurrency());
+            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
+            BigDecimal exchangeCurrencyToValue = new BigDecimal(exchangeCurrencyTo.getValue());
+            BigDecimal convertToSom = transaction.getAmount().multiply(exchangeValue);
+            BigDecimal convertToAnotherCurrency = convertToSom.divide(exchangeCurrencyToValue, RoundingMode.HALF_UP);
+            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
+            accountTo.setAmount(accountTo.getAmount().add(convertToAnotherCurrency));
         }
-    }*/
+        return transaction;
+    }
 }

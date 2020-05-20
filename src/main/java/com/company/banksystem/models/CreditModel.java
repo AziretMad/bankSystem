@@ -2,6 +2,7 @@ package com.company.banksystem.models;
 
 import com.company.banksystem.entity.Client;
 import com.company.banksystem.enums.CreditPaymentType;
+import com.company.banksystem.enums.Currency;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,4 +20,5 @@ public class CreditModel {
     Integer duration;
     Client client;
     CreditPaymentType creditType;
+    Currency currency;
 }
