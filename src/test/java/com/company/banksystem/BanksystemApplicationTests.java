@@ -2,6 +2,7 @@ package com.company.banksystem;
 
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.Deposit;
+import com.company.banksystem.enums.CreditPaymentType;
 import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
 import com.company.banksystem.service.DepositAccrualServiceImpl;
@@ -75,8 +76,9 @@ class BanksystemApplicationTests {
 		Credit credit = Credit.builder()
 				.duration(24)
 				.amount(BigDecimal.valueOf(800000))
+                .creditType(CreditPaymentType.EQUAL)
 				.interestRate(12D).build();
-		BigDecimal amount = paymentCalculator.paymentCalculator(credit.getId());
+		BigDecimal amount = paymentCalculator.paymentCalculator(credit);
 		System.out.println(amount);
 		BigDecimal neededAmount = BigDecimal.valueOf(38095);
 		boolean result = false;

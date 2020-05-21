@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 @Service
-public class PaymentCalculatorService {
+public class PaymentCalculatorService<list> {
     @Autowired
     private CreditPaymentServiceImpl creditPaymentService;
     @Autowired
@@ -61,6 +64,29 @@ public class PaymentCalculatorService {
         return monthPayment;
     }
 
+    public BigDecimal differentiatedList(Credit credit, Integer month){
+        ////Погашение осуществляется дифференцированным платежами.
+        Double percent = credit.getInterestRate();
+        BigDecimal amount = credit.getAmount();
+        Integer period = month;
+        Integer duration = credit.getDuration();
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.format(percent);
+        String s = df.format(percent).replace(',', '.');
+        Double d = Double.valueOf(s);
+        BigDecimal monthPercent = BigDecimal.valueOf(d);
+        BigDecimal basePayment = amount.divide(BigDecimal.valueOf(duration), 2);
+        GregorianCalendar calendar = new GregorianCalendar();
+        Integer yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+        Integer monthDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        BigDecimal balance = amount.subtract(basePayment.multiply(BigDecimal.valueOf(period)));
+        BigDecimal interestCharges = balance.multiply(BigDecimal.valueOf(percent))
+                .multiply(BigDecimal.valueOf(monthDay))
+                .divide(BigDecimal.valueOf(yearDays),2);
+        BigDecimal monthPayment = basePayment.add(interestCharges);
+        return monthPayment;
+    }
+
     public BigDecimal paymentCalculator(Long id){
         Credit credit = creditService.getById(id);
         if(credit.getCreditType().equals(CreditPaymentType.EQUAL)){
@@ -70,5 +96,31 @@ public class PaymentCalculatorService {
             return differentiatedPayment(credit);
         }
         return null;
+    }
+
+    public BigDecimal paymentCalculator(Credit credit){
+        if(credit.getCreditType().equals(CreditPaymentType.EQUAL)){
+            return annuityPayment(credit);
+        }
+        else if(credit.getCreditType().equals(CreditPaymentType.DIFFERENTIATED)){
+            return differentiatedPayment(credit);
+        }
+        return null;
+    }
+
+    public List<BigDecimal> getAllPayments(Long id){
+        Credit credit = creditService.getById(id);
+        List<BigDecimal> list = new ArrayList<>();
+        if(credit.getCreditType().equals(CreditPaymentType.EQUAL)){
+            for(int i = 0; i < credit.getDuration(); i++){
+                list.add(annuityPayment(credit));
+            }
+        }
+        else if(credit.getCreditType().equals(CreditPaymentType.DIFFERENTIATED)){
+            for(int i = 0; i < credit.getDuration(); i++){
+                list.add(differentiatedList(credit, i));
+            }
+        }
+        return list;
     }
 }
