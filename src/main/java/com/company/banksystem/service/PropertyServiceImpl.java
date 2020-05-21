@@ -32,6 +32,7 @@ public class PropertyServiceImpl implements PropertyService {
             Property property = Property.builder()
                     .marketPrice(propertyModel.getMarketPrice())
                     .description(propertyModel.getDescription())
+                    .valuationPrice(setValuationPrice(propertyModel.getMarketPrice()))
                     .client(client)
                     .credit(credit)
                     .build();

@@ -4,11 +4,13 @@ import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
-import com.company.banksystem.service.CreditPaymentServiceImpl;
 import com.company.banksystem.service.DepositAccrualServiceImpl;
 import com.company.banksystem.service.DepositServiceImpl;
 import com.company.banksystem.service.interfaces.DepositAccrualService;
 import org.junit.jupiter.api.Test;
+
+import com.company.banksystem.service.PaymentCalculatorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -17,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class BanksystemApplicationTests {
+	@Autowired
+	private PaymentCalculatorService paymentCalculator;
 
+/*
     @Test
     void testCalculator() {
         Credit credit = Credit.builder()
@@ -32,7 +37,7 @@ class BanksystemApplicationTests {
             result = true;
         }
         assertTrue(result);
-    }
+    }*/
 
     @Test
     void testNumber() {
@@ -63,4 +68,21 @@ class BanksystemApplicationTests {
         assertTrue(result);
     }
 
+
+
+	@Test
+	void testCalculator() {
+		Credit credit = Credit.builder()
+				.duration(24)
+				.amount(BigDecimal.valueOf(800000))
+				.interestRate(12D).build();
+		BigDecimal amount = paymentCalculator.paymentCalculator(credit.getId());
+		System.out.println(amount);
+		BigDecimal neededAmount = BigDecimal.valueOf(38095);
+		boolean result = false;
+		if(amount == neededAmount) {
+			result = true;
+		}
+		assertTrue(result);
+	}
 }

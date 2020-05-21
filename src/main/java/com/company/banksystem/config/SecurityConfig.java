@@ -11,12 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
 @EnableWebSecurity
-@Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
@@ -30,15 +31,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select * from client where full_name = ?")
-                .authoritiesByUsernameQuery("select su.full_name, sur.role_name from client su inner join client_roles sur on sur.client_id = su.id where full_name = ?");
+
+                .usersByUsernameQuery("select * from client where full_name = ?;")
+                .usersByUsernameQuery("select full_name, telephone, address, inn, password from client where full_name = ?")
+                .authoritiesByUsernameQuery("select su.full_name, sur.role_name from client su inner join client_roles sur on sur.client_id = su.id where full_name = ?;");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/client/add").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/client/all").hasRole("ADMIN")
+                .antMatchers( HttpMethod.POST,"/client/add").permitAll()
+                .antMatchers(HttpMethod.GET, "/client/all").permitAll()
                 .antMatchers(HttpMethod.GET, "/client/getById/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/client/update").hasRole("ADMIN")
@@ -47,11 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/bankAccount/getById/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/bankAccount/delete/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/bankAccount/update").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/paymentCalculator/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/paymentCalculator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/credit/all").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/credit/add").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/credit/getById/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/credit/delete/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/credit/getById/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/credit/delete/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/credit/update").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/creditPayment/all").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/creditPayment/getById/{id}").hasRole("ADMIN")
@@ -100,7 +103,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/transaction/add").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/transaction/delete/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/transaction/update").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/transaction/confirmation").hasRole("ADMIN")
-                .and().httpBasic().and().csrf().disable();
+                .antMatchers(HttpMethod.POST, "/transaction/confirmation").hasRole("ADMIN").
+
+        and().csrf().disable().headers().frameOptions().disable().and()
+
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 }

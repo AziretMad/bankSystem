@@ -30,7 +30,7 @@ public class CreditServiceImpl implements CreditService {
                     .creditNumber(generateCreditNumber())
                     .amount(creditModel.getAmount())
                     .interestRate(creditModel.getInterestRate())
-                    .paymentType(creditModel.getCreditType())
+                    .creditType(creditModel.getCreditType())
                     .duration(creditModel.getDuration())
                     .client(client)
                     .build();

@@ -1,9 +1,7 @@
 package com.company.banksystem.service;
 
 import com.company.banksystem.entity.Credit;
-import com.company.banksystem.entity.actions.CreditPayment;
 import com.company.banksystem.enums.CreditPaymentType;
-import com.company.banksystem.repository.CreditPaymentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,10 +63,10 @@ public class PaymentCalculatorService {
 
     public BigDecimal paymentCalculator(Long id){
         Credit credit = creditService.getById(id);
-        if(credit.getPaymentType().equals(CreditPaymentType.EQUAL)){
+        if(credit.getCreditType().equals(CreditPaymentType.EQUAL)){
             return annuityPayment(credit);
         }
-        else if(credit.getPaymentType().equals(CreditPaymentType.DIFFERENTIATED)){
+        else if(credit.getCreditType().equals(CreditPaymentType.DIFFERENTIATED)){
             return differentiatedPayment(credit);
         }
         return null;

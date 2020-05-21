@@ -4,10 +4,10 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "rolesss")
+@Table(name = "client_roles")
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -19,11 +19,11 @@ public class ClientRoles {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @NotNull
-    @Column(name = "role_name", unique = true)
-    String RoleName;
+
+    @Column(name = "role_name")
+    String roleName;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id" , referencedColumnName = "id")
     Client client;
 }

@@ -14,4 +14,5 @@ public class ClientModel {
     String telephone;
     String address;
     String inn;
+    String password;
 }
