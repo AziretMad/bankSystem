@@ -30,19 +30,19 @@ public class StatementProcessController {
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity create(@RequestBody StatementProcessing statementProcessing) {
+    @PostMapping("/add/{status}")
+    public ResponseEntity create(@RequestBody StatementProcessing statementProcessing, @PathVariable("status") Status status) {
         try {
-            StatementProcessing statement = proService.create(statementProcessing);
+            StatementProcessing statement = proService.create(statementProcessing, status);
             return new ResponseEntity<>(statement, HttpStatus.CREATED);
         } catch (Exception e) {
-            log.error(" ",e);
+            log.error(" ", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id)  {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         try {
             proService.deleteById(id);
             return new ResponseEntity(HttpStatus.OK);
@@ -61,15 +61,6 @@ public class StatementProcessController {
         }
     }
 
-    @GetMapping("/getByAllStatus/{status}")
-    public ResponseEntity getAllByStatus(@PathVariable("status") Status status) {
-        try {
-            List<StatementProcessing> list = proService.getAllByIsAccepted(status);
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @GetMapping("getById/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {

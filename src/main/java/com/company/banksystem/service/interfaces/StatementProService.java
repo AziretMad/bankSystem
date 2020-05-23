@@ -9,9 +9,14 @@ import java.util.List;
 
 public interface StatementProService {
     List<StatementProcessing> getAllByStatementType(StatementType statementType);
-    StatementProcessing create(StatementProcessing statement) throws Exception;
-    List<StatementProcessing>getAll();
+
+    StatementProcessing create(StatementProcessing statement, Status status) throws Exception;
+
+    List<StatementProcessing> getAll();
+
     void deleteById(Long id) throws NotFoundStatement;
+
     StatementProcessing getById(Long id);
-    List<StatementProcessing>getAllByIsAccepted(Status status);
+
+  //  List<StatementProcessing> getAllByIsAccepted(Status status);
 }

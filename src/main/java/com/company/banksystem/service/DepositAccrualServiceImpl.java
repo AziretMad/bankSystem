@@ -3,16 +3,20 @@ package com.company.banksystem.service;
 import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.actions.DepositAccrual;
+import com.company.banksystem.entity.actions.Exchange;
+import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.enums.TransactionStatus;
 import com.company.banksystem.exceptions.NotFoundBankAccount;
 import com.company.banksystem.exceptions.NotFoundDeposit;
 import com.company.banksystem.models.actions.DepositAccrualModel;
+import com.company.banksystem.models.actions.ExchangeModel;
 import com.company.banksystem.repository.DepositAccrualRepo;
 import com.company.banksystem.service.interfaces.BankAccountService;
 import com.company.banksystem.service.interfaces.DepositAccrualService;
 import com.company.banksystem.service.interfaces.DepositService;
+import com.company.banksystem.service.interfaces.ExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,8 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
     private DepositService depositService;
     @Autowired
     private BankAccountService bankAccountService;
+    @Autowired
+    private ExchangeService exchangeService;
 
     @Override
     public DepositAccrual create(DepositAccrualModel entity) throws Exception {
@@ -73,10 +79,9 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
     @Override
     public DepositAccrual setAccrualByDepositType(Long depositId) throws Exception {
         Deposit deposit = depositService.getById(depositId);
-        if (deposit != null) {
+        if (deposit != null&&deposit.getStatus().equals(Status.ACTIVE)) {
             DepositType depositType = deposit.getDepositType();
             DepositAccrual depositAccrual = findByDepositId(depositId);
-            BankAccount bankAccount = bankAccountService.getById(depositAccrual.getBankAccount().getId());
                 switch (depositType) {
                     case SAVINGS:
                     case DEMAND:
@@ -87,9 +92,11 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
                         depositAccrual.setStatus(TransactionStatus.OK);
                         break;
                     case CUMULATIVE:
+                        BankAccount bankAccount = bankAccountService.getById(depositAccrual.getBankAccount().getId());
                         if (bankAccount != null&& bankAccount.getStatus().equals(Status.ACTIVE)) {
                             //accrued interest is added to other bank account
-                            bankAccount.setAmount(bankAccount.getAmount().add(accrualCalculate(deposit)));
+                            bankAccount.setAmount(bankAccount.getAmount()
+                                    .add(saveExchange(deposit.getCurrency(),bankAccount.getCurrency(),accrualCalculate(deposit))));
                             depositAccrual.setStatus(TransactionStatus.OK);
                             depositAccrual.setAmount(accrualCalculate(deposit));
                         } else
@@ -110,5 +117,10 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
                 .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_DOWN);
         return action;
     }
-
+    private BigDecimal saveExchange(Currency accountFrom, Currency accountTo, BigDecimal amount) throws Exception {
+        ExchangeModel model = ExchangeModel.builder().currencyFrom(accountFrom)
+                .currencyTo(accountTo).amount(amount).build();
+        Exchange exchange = exchangeService.create(model);
+        return exchangeService.exchange(model);
+    }
 }

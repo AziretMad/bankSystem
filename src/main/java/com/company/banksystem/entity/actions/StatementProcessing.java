@@ -1,7 +1,6 @@
 package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.enums.StatementType;
-import com.company.banksystem.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,12 +20,6 @@ public class StatementProcessing {
 
     @Column(name="statement_id")
     Long statementId;
-
-    @Column(name="status")
-    Status status;
-
-    @Column(name="reason")
-    String reason;
 
     @Enumerated
     @Column(name="statementType")

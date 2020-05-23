@@ -38,31 +38,37 @@ public class StatementProServiceImpl implements StatementProService {
     }
 
     @Override
-    public StatementProcessing create(StatementProcessing statement) throws Exception {
+    public StatementProcessing create(StatementProcessing statement, Status status) throws Exception {
         StatementType type = statement.getStatementType();
-        if (type.equals(StatementType.CREDIT)) {
-            Credit credit = creditService.getById(statement.getStatementId());
-            if (credit != null) {
-                credit.setStatus(statement.getStatus());
-                if (statement.getStatus().equals(Status.CLOSED))
-                    credit.setClosedDate(new Date());
-            } else throw new NotFoundCredit();
+        switch (type) {
+            case CREDIT: {
+                Credit credit = creditService.getById(statement.getStatementId());
+                if (credit != null && credit.getStatus().equals(Status.INACTIVE)) {
+                    credit.setStatus(status);
+                    if (status.equals(Status.CLOSED))
+                        credit.setClosedDate(new Date());
+                    creditService.update(credit);
+                } else throw new NotFoundCredit();
 
-        } else if (type.equals(StatementType.DEPOSIT)) {
-            Deposit deposit = depositService.getById(statement.getStatementId());
-            if (deposit != null) {
-                deposit.setStatus(statement.getStatus());
-                if (statement.getStatus().equals(Status.CLOSED))
-                    deposit.setClosedDate(new Date());
-
-            } else throw new NotFoundDeposit();
-        } else if (type.equals(StatementType.BANK_ACCOUNT)) {
-            BankAccount bankAccount = bankAccountService.getById(statement.getStatementId());
-            if (bankAccount != null) {
-                bankAccount.setStatus(statement.getStatus());
-                if (statement.getStatus().equals(Status.CLOSED))
-                    bankAccount.setClosedDate(new Date());
-            } else throw new NotFoundDeposit();
+            }
+            case DEPOSIT: {
+                Deposit deposit = depositService.getById(statement.getStatementId());
+                if (deposit != null && deposit.getStatus().equals(Status.INACTIVE)) {
+                    deposit.setStatus(status);
+                    if (status.equals(Status.CLOSED))
+                        deposit.setClosedDate(new Date());
+                    depositService.update(deposit);
+                } else throw new NotFoundDeposit();
+            }
+            case BANK_ACCOUNT: {
+                BankAccount bankAccount = bankAccountService.getById(statement.getStatementId());
+                if (bankAccount != null && bankAccount.getStatus().equals(Status.INACTIVE)) {
+                    bankAccount.setStatus(status);
+                    if (status.equals(Status.CLOSED))
+                        bankAccount.setClosedDate(new Date());
+                    bankAccountService.update(bankAccount);
+                } else throw new NotFoundDeposit();
+            }
         }
         return processRepo.save(statement);
     }
@@ -70,11 +76,6 @@ public class StatementProServiceImpl implements StatementProService {
     @Override
     public List<StatementProcessing> getAll() {
         return processRepo.findAll();
-    }
-
-    @Override
-    public List<StatementProcessing> getAllByIsAccepted(Status status) {
-        return processRepo.findAllByStatus(status);
     }
 
     @Override
@@ -90,4 +91,5 @@ public class StatementProServiceImpl implements StatementProService {
         Optional<StatementProcessing> processing = processRepo.findById(id);
         return processing.orElse(new StatementProcessing());
     }
+
 }

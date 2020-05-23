@@ -1,5 +1,6 @@
 package com.company.banksystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -30,6 +31,10 @@ public class Client {
     @Column(name="inn")
     String inn;
 
+    @JsonIgnore
     @Column(name = "password")
     String password;
+
+    @Column(name = "is_active")
+    int isActive;
 }
