@@ -61,4 +61,7 @@ public class Credit {
     @Enumerated(EnumType.STRING)
     @Column(name="currency")
     Currency currency;
+
+    @Column(name = "neededAmount")
+    BigDecimal neededAmount;
 }

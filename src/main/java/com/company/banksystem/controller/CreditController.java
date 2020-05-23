@@ -61,4 +61,26 @@ public class CreditController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/search/{number}")
+    public ResponseEntity findCreditByNumber(@PathVariable("number")String number){
+        try{
+            Credit credit = creditService.findCreditByNumber(number);
+            return new ResponseEntity(credit, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/search/{id}")
+    public ResponseEntity findAllCreditsByClientId(@PathVariable("id") Long id){
+        try{
+            List<Credit> list = creditService.findAllCreditByClientId(id);
+            return new ResponseEntity(list, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

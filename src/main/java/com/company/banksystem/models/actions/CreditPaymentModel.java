@@ -12,6 +12,6 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class CreditPaymentModel {
-    Credit credit;
+    Long creditId;
     BigDecimal amount;
 }

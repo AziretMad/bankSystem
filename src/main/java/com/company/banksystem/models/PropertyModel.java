@@ -16,6 +16,6 @@ import java.math.BigDecimal;
 public class PropertyModel {
     BigDecimal marketPrice;
     String description;
-    Client client;
-    Credit credit;
+    Long client;
+    Long credit;
 }

@@ -94,4 +94,12 @@ public class DepositServiceImpl implements DepositService {
         Double d=interestRate.getInterestRate();
         return d;
     }
+
+    public List<Deposit> getAllDepositsByClientId(Long id){
+        return depositRepo.findAllDepositsByClientId(id);
+    }
+
+    public Deposit getDepositByNumber(String number){
+        return depositRepo.findDepositByDepositNumber(number);
+    }
 }

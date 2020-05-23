@@ -74,13 +74,13 @@ class BanksystemApplicationTests {
 	@Test
 	void testCalculator() {
 		Credit credit = Credit.builder()
-				.duration(24)
-				.amount(BigDecimal.valueOf(800000))
-                .creditType(CreditPaymentType.EQUAL)
-				.interestRate(12D).build();
+				.duration(6)
+				.amount(BigDecimal.valueOf(300000))
+                .creditType(CreditPaymentType.DIFFERENTIATED)
+				.interestRate(20D).build();
 		BigDecimal amount = paymentCalculator.paymentCalculator(credit);
 		System.out.println(amount);
-		BigDecimal neededAmount = BigDecimal.valueOf(38095);
+		BigDecimal neededAmount = BigDecimal.valueOf(55081.97);
 		boolean result = false;
 		if(amount == neededAmount) {
 			result = true;

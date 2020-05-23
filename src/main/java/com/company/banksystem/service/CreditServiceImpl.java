@@ -9,9 +9,7 @@ import com.company.banksystem.service.interfaces.CreditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static com.company.banksystem.service.BankAccountServiceImpl.luhnAlgorithm;
 
@@ -34,6 +32,10 @@ public class CreditServiceImpl implements CreditService {
                     .duration(creditModel.getDuration())
                     .client(client)
                     .build();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(credit.getCreatedDate());
+            calendar.add(Calendar.MONTH, credit.getDuration());
+            credit.setClosedDate(calendar.getTime());
             return creditRepo.save(credit);
         }else throw  new NotFoundClient();
     }
@@ -73,4 +75,14 @@ public class CreditServiceImpl implements CreditService {
     public Integer luhnAlgorithms(String code) {
         return luhnAlgorithm(code);
     }
+
+    public Credit findCreditByNumber(String number){
+         return creditRepo.findCreditByCreditNumber(number);
+    }
+
+    public List<Credit> findAllCreditByClientId(Long id){
+        return creditRepo.findAllCreditsByClientId(id);
+    }
+
+
 }

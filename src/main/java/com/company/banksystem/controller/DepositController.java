@@ -2,6 +2,7 @@ package com.company.banksystem.controller;
 
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.models.DepositModel;
+import com.company.banksystem.service.DepositServiceImpl;
 import com.company.banksystem.service.interfaces.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/deposit")
 public class DepositController {
     @Autowired
-    private DepositService depositService;
+    private DepositServiceImpl depositService;
 
     @GetMapping("/all")
     public ResponseEntity getAll() {
@@ -61,6 +62,26 @@ public class DepositController {
         try {
             Deposit deposit1 = depositService.update(deposit);
             return new ResponseEntity<>(deposit1, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/search/{number}")
+    public ResponseEntity getDepositByNUmber(@PathVariable("number") String number) {
+        try {
+            Deposit deposit = depositService.getDepositByNumber(number);
+            return new ResponseEntity<>(deposit, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/search/{id}")
+    public ResponseEntity getAllDepositsByClientId(@PathVariable("id") Long id) {
+        try {
+            List<Deposit> list = depositService.getAllDepositsByClientId(id);
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

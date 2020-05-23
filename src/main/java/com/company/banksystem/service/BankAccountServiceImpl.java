@@ -82,4 +82,12 @@ public class BankAccountServiceImpl implements BankAccountService {
             return 0;
         return 10 - (sum % 10);
     }
+
+    public List<BankAccount> getAllAccountsByClientId(Long id){
+        return bankAccountRepo.findBankAccountsByClientId(id);
+    }
+
+    public BankAccount getAccountByNumber(String number){
+        return bankAccountRepo.findBankAccountByAccountNumber(number);
+    }
 }

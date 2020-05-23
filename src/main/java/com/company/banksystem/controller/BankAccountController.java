@@ -64,4 +64,24 @@ public class BankAccountController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/search/{id}")
+    public ResponseEntity getAllAccountsByClientId(@PathVariable("id") Long id) {
+        try {
+            List<BankAccount> list = bankAccountService.getAllAccountsByClientId(id);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/searchByNumber/{number}")
+    public ResponseEntity getAccountByNumber(@PathVariable("number") String number) {
+        try {
+            BankAccount bankAccount = bankAccountService.getAccountByNumber(number);
+            return new ResponseEntity<>(bankAccount, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

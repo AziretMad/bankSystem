@@ -26,7 +26,7 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
 
     @Override
     public CreditPayment create(CreditPaymentModel entity) throws Exception{
-        Credit credit = creditService.getById(entity.getCredit().getId());
+        Credit credit = creditService.getById(entity.getCreditId());
         if(credit!=null) {
             if (entity.getAmount().equals(paymentCalculatorService.paymentCalculator(credit.getId()))) {
                 CreditPayment creditPayment = CreditPayment.builder()
@@ -63,7 +63,15 @@ public class CreditPaymentServiceImpl implements CreditPaymentService {
         return creditPaymentRepo.save(entity);
     }
 
-    public Integer getPaymentsByCredit(Long id){
-        return creditPaymentRepo.findAllPaymentsByCredit(id);
+    public Integer countPaymentsByCredit(Long id){
+        return creditPaymentRepo.countAllPaymentsByCredit(id);
+    }
+
+    public List<CreditPayment> getPaymentsByCreditId(Long id){
+        return creditPaymentRepo.getCreditPaymentsByCreditId(id);
+    }
+
+    public List<CreditPayment> getPaymentsByCreditNumber(String number){
+        return creditPaymentRepo.getCreditPaymentsByCreditNumber(number);
     }
 }

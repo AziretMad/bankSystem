@@ -4,6 +4,7 @@ import com.company.banksystem.entity.actions.CreditPayment;
 import com.company.banksystem.models.actions.CreditPaymentModel;
 import com.company.banksystem.service.CreditPaymentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,26 @@ public class CreditPaymentController {
             return new ResponseEntity<>(updated,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/searchById/{id}")
+    public ResponseEntity getPaymentsByCreditId(@PathVariable("id") Long id) {
+        try {
+            List<CreditPayment> list = creditPaymentService.getPaymentsByCreditId(id);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/searchByNumber/{number}")
+    public ResponseEntity getPaymentsByCreditNumber(@PathVariable("number") String number) {
+        try {
+            List<CreditPayment> list = creditPaymentService.getPaymentsByCreditNumber(number);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
