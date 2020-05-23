@@ -7,6 +7,9 @@ import com.company.banksystem.service.ClientServiceImpl;
 import com.company.banksystem.service.CreditServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +23,9 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         Client client = Client.builder().fullName("user")
-                .password("456")
+                .password(passwordEncoder().encode("123"))
                 .isActive(1).build();
         ClientRoles cl = ClientRoles.builder()
                 .client(client)
@@ -29,7 +33,7 @@ public class Bootstrap implements CommandLineRunner {
                 .build();
         Client clientModel1 = Client.builder()
                 .fullName("admin")
-                .password("123")
+                .password(passwordEncoder().encode("456"))
                 .isActive(1)
                 .build();
         ClientRoles cl1 = ClientRoles.builder()
@@ -41,5 +45,9 @@ public class Bootstrap implements CommandLineRunner {
 
         clientRolesRepo.save(cl);
         clientRolesRepo.save(cl1);
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

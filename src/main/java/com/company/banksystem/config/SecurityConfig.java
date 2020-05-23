@@ -1,8 +1,7 @@
-/*
+
 package com.company.banksystem.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,7 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
@@ -22,31 +20,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
-                .dataSource(dataSource)
-
-
-                .usersByUsernameQuery("select full_name, password, telephone, address, inn, is_active from client where full_name = ?")
+                .dataSource(dataSource).passwordEncoder(passwordEncoder)
+                .usersByUsernameQuery("select full_name, password, is_active from client where full_name = ?")
                 .authoritiesByUsernameQuery("select su.full_name, sur.role_name from client su inner join client_roles sur on sur.client_id = su.id where full_name = ?;");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/client/add").permitAll()
-                .antMatchers("/client/all").permitAll()
-                .antMatchers( "/client/getById/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/client/add").permitAll()
+                .antMatchers(HttpMethod.GET,"/client/all").permitAll()
+                .antMatchers( HttpMethod.GET,"/client/getById/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/client/update").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/bankAccount/add").hasRole("ADMIN")
-                .antMatchers("/bankAccount/all").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/bankAccount/all").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/bankAccount/getById/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/bankAccount/delete/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/bankAccount/update").hasRole("ADMIN")
@@ -109,4 +103,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
-}*/
+}
