@@ -1,21 +1,23 @@
 package com.company.banksystem.service;
 
 import com.company.banksystem.entity.BankAccount;
-import com.company.banksystem.entity.ExchangeCurrency;
+import com.company.banksystem.entity.actions.Exchange;
 import com.company.banksystem.entity.actions.Transaction;
 import com.company.banksystem.enums.Currency;
+import com.company.banksystem.enums.Status;
 import com.company.banksystem.enums.TransactionStatus;
 import com.company.banksystem.exceptions.*;
 import com.company.banksystem.models.Confirmation;
+import com.company.banksystem.models.actions.ExchangeModel;
 import com.company.banksystem.models.actions.TransactionModel;
 import com.company.banksystem.repository.TransactionRepo;
 import com.company.banksystem.service.interfaces.ExchangeCurrencyService;
+import com.company.banksystem.service.interfaces.ExchangeService;
 import com.company.banksystem.service.interfaces.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -26,6 +28,8 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepo transactionRepo;
     @Autowired
     private BankAccountServiceImpl bankAccountService;
+    @Autowired
+    private ExchangeService exchangeService;
     private static int count = 0;
 
     @Autowired
@@ -36,7 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
         BankAccount accountTo = bankAccountService.getById(entity.getAccountTo().getId());
         BankAccount accountFrom = bankAccountService.getById(entity.getAccountFrom().getId());
         if (accountFrom != null && accountTo != null) {
-            Transaction transaction = Transaction.builder().currency(entity.getCurrency())
+            Transaction transaction = Transaction.builder()
                     .amount(entity.getAmount())
                     .accountTo(accountTo)
                     .accountFrom(accountFrom)
@@ -75,12 +79,15 @@ public class TransactionServiceImpl implements TransactionService {
                 count++;
                 if (count > 3 && transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
                     transaction.setStatus(TransactionStatus.BLOCKED);
-                throw new WrongConfirmationCode();
+                else
+                    throw new WrongConfirmationCode();
             }
-            if (!transaction.getAccountFrom().getCodeWord().equals(codeWord) &&
-                    transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS)) {
-                transaction.setStatus(TransactionStatus.FAIL);
-                throw new WrongKeyWordException();
+            if (!transaction.getAccountFrom().getCodeWord().equals(codeWord)) {
+                count++;
+                if (count > 3 && transaction.getStatus().equals(TransactionStatus.AWAITING_PROCESS))
+                    transaction.setStatus(TransactionStatus.FAIL);
+                else
+                    throw new WrongKeyWordException();
             }
             if (transaction.getCode().equals(confirmation.getConfirmationCode())) {
                 if (transaction.getAccountFrom().getCodeWord().equals(codeWord)) {
@@ -93,18 +100,19 @@ public class TransactionServiceImpl implements TransactionService {
         return update(transactionFinallyProcess(transaction));
     }
 
-    private Transaction transactionFinallyProcess(Transaction transaction) throws NotFoundCurrency {
+    private Transaction transactionFinallyProcess(Transaction transaction) throws Exception {
         if (transaction.getStatus().equals(TransactionStatus.OK)) {
-            Transaction transaction1=exchangeCurrency(transaction);
-            BankAccount accountFrom = bankAccountService.getById(transaction1.getAccountFrom().getId());
-            BankAccount accountTo = bankAccountService.getById(transaction1.getAccountTo().getId());
-
-            bankAccountService.update(accountFrom);
-            bankAccountService.update(accountTo);
-            transaction.setAccountFrom(accountFrom);
-            transaction.setAccountTo(accountTo);
-        }
-        return transaction;
+//            Transaction transaction1 = exchangeCurrency(transaction);
+//            BankAccount accountFrom = bankAccountService.getById(transaction1.getAccountFrom().getId());
+//            BankAccount accountTo = bankAccountService.getById(transaction1.getAccountTo().getId());
+//
+//            bankAccountService.update(accountFrom);
+//            bankAccountService.update(accountTo);
+//            transaction.setAccountFrom(accountFrom);
+//            transaction.setAccountTo(accountTo);
+            return exchangeCurrency(transaction);
+        } else
+            return transaction;
     }
 
     private static Integer getRandomCode() {
@@ -113,36 +121,24 @@ public class TransactionServiceImpl implements TransactionService {
         return result;
     }
 
-    private Transaction exchangeCurrency(Transaction transaction) throws NotFoundCurrency {
-        Currency accountFromCurrency = transaction.getAccountFrom().getCurrency();
-        Currency accountToCurrency = transaction.getAccountTo().getCurrency();
+    private Transaction exchangeCurrency(Transaction transaction) throws Exception {
         BankAccount accountFrom = bankAccountService.getById(transaction.getAccountFrom().getId());
         BankAccount accountTo = bankAccountService.getById(transaction.getAccountTo().getId());
-        ExchangeCurrency exchangeCurrency;
-        BigDecimal exchangeValue;
-        if (accountFromCurrency.equals(accountToCurrency)) {
+        if (accountTo.getStatus().equals(Status.ACTIVE) && accountFrom.getStatus().equals(Status.ACTIVE)) {
             accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount()));
-        } else if (accountFromCurrency.equals(Currency.KGS)) {
-            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountToCurrency);
-            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().divide(exchangeValue, RoundingMode.HALF_UP)));
-        } else if (accountToCurrency.equals(Currency.KGS)) {
-            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
-            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-            accountTo.setAmount(accountTo.getAmount().add(transaction.getAmount().multiply(exchangeValue)));
-        } else {
-            exchangeCurrency = exchangeCurrencyService.getByCurrency(accountFromCurrency);
-            ExchangeCurrency exchangeCurrencyTo = exchangeCurrencyService.getByCurrency(accountTo.getCurrency());
-            exchangeValue = new BigDecimal(exchangeCurrency.getValue());
-            BigDecimal exchangeCurrencyToValue = new BigDecimal(exchangeCurrencyTo.getValue());
-            BigDecimal convertToSom = transaction.getAmount().multiply(exchangeValue);
-            BigDecimal convertToAnotherCurrency = convertToSom.divide(exchangeCurrencyToValue, RoundingMode.HALF_UP);
-            accountFrom.setAmount(accountFrom.getAmount().subtract(transaction.getAmount()));
-            accountTo.setAmount(accountTo.getAmount().add(convertToAnotherCurrency));
-        }
+            accountTo.setAmount(accountTo.getAmount()
+                    .add(saveExchange(accountFrom.getCurrency(), accountTo.getCurrency(), transaction.getAmount())));
+        } else throw new BankAccountIsNotActive();
+        bankAccountService.update(accountFrom);
+        bankAccountService.update(accountTo);
+        update(transaction);
         return transaction;
+    }
+
+    private BigDecimal saveExchange(Currency accountFrom, Currency accountTo, BigDecimal amount) throws Exception {
+        ExchangeModel model = ExchangeModel.builder().currencyFrom(accountFrom)
+                .currencyTo(accountTo).amount(amount).build();
+        Exchange exchange = exchangeService.create(model);
+        return exchangeService.exchange(model);
     }
 }

@@ -4,6 +4,7 @@ import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.actions.DepositAccrual;
 import com.company.banksystem.enums.DepositType;
+import com.company.banksystem.enums.Status;
 import com.company.banksystem.enums.TransactionStatus;
 import com.company.banksystem.exceptions.NotFoundBankAccount;
 import com.company.banksystem.exceptions.NotFoundDeposit;
@@ -86,7 +87,7 @@ public class DepositAccrualServiceImpl implements DepositAccrualService {
                         depositAccrual.setStatus(TransactionStatus.OK);
                         break;
                     case CUMULATIVE:
-                        if (bankAccount != null) {
+                        if (bankAccount != null&& bankAccount.getStatus().equals(Status.ACTIVE)) {
                             //accrued interest is added to other bank account
                             bankAccount.setAmount(bankAccount.getAmount().add(accrualCalculate(deposit)));
                             depositAccrual.setStatus(TransactionStatus.OK);

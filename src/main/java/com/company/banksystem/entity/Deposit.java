@@ -3,6 +3,7 @@ package com.company.banksystem.entity;
 import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.DepositType;
 import com.company.banksystem.enums.Status;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Setter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

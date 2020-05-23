@@ -22,7 +22,10 @@ public class ExchangeCurrency  {
     @Enumerated(value = EnumType.STRING)
     Currency currency;
 
-    @Column(name="value")
-    Double value;
+    @Column(name="buying")
+    Double buying;
+
+    @Column(name="selling")
+    Double selling;
 
 }

@@ -1,7 +1,6 @@
 package com.company.banksystem.entity.actions;
 
 import com.company.banksystem.entity.BankAccount;
-import com.company.banksystem.enums.Currency;
 import com.company.banksystem.enums.TransactionStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -43,10 +42,6 @@ public class Transaction {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     TransactionStatus status;
-
-    @Column(name = "currency")
-    @Enumerated(EnumType.STRING)
-    Currency currency;
 
     @Column(name="code")
     Integer code;

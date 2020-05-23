@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class ExchangeCurrencyServiceImpl implements ExchangeCurrencyService {
     @Autowired
@@ -28,7 +29,8 @@ public class ExchangeCurrencyServiceImpl implements ExchangeCurrencyService {
     public ExchangeCurrency create(ExchangeCurrencyModel entity) throws Exception {
         ExchangeCurrency currency = ExchangeCurrency.builder()
                 .currency(entity.getCurrency())
-                .value(entity.getValue())
+                .selling(entity.getSelling())
+                .buying(entity.getBuying())
                 .build();
         return currencyRepository.save(currency);
     }

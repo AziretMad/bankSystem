@@ -1,5 +1,6 @@
 package com.company.banksystem.service;
 
+import com.company.banksystem.entity.BankAccount;
 import com.company.banksystem.entity.Credit;
 import com.company.banksystem.entity.Deposit;
 import com.company.banksystem.entity.actions.StatementProcessing;
@@ -9,6 +10,7 @@ import com.company.banksystem.exceptions.NotFoundCredit;
 import com.company.banksystem.exceptions.NotFoundDeposit;
 import com.company.banksystem.exceptions.NotFoundStatement;
 import com.company.banksystem.repository.StatementProcessRepo;
+import com.company.banksystem.service.interfaces.BankAccountService;
 import com.company.banksystem.service.interfaces.CreditService;
 import com.company.banksystem.service.interfaces.DepositService;
 import com.company.banksystem.service.interfaces.StatementProService;
@@ -27,6 +29,8 @@ public class StatementProServiceImpl implements StatementProService {
     private DepositService depositService;
     @Autowired
     private CreditService creditService;
+    @Autowired
+    private BankAccountService bankAccountService;
 
     @Override
     public List<StatementProcessing> getAllByStatementType(StatementType statementType) {
@@ -50,6 +54,14 @@ public class StatementProServiceImpl implements StatementProService {
                 deposit.setStatus(statement.getStatus());
                 if (statement.getStatus().equals(Status.CLOSED))
                     deposit.setClosedDate(new Date());
+
+            } else throw new NotFoundDeposit();
+        } else if (type.equals(StatementType.BANK_ACCOUNT)) {
+            BankAccount bankAccount = bankAccountService.getById(statement.getStatementId());
+            if (bankAccount != null) {
+                bankAccount.setStatus(statement.getStatus());
+                if (statement.getStatus().equals(Status.CLOSED))
+                    bankAccount.setClosedDate(new Date());
             } else throw new NotFoundDeposit();
         }
         return processRepo.save(statement);

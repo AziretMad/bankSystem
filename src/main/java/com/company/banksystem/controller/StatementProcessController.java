@@ -4,6 +4,7 @@ import com.company.banksystem.entity.actions.StatementProcessing;
 import com.company.banksystem.enums.StatementType;
 import com.company.banksystem.enums.Status;
 import com.company.banksystem.service.interfaces.StatementProService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/statementProcess")
 public class StatementProcessController {
 
@@ -34,6 +36,7 @@ public class StatementProcessController {
             StatementProcessing statement = proService.create(statementProcessing);
             return new ResponseEntity<>(statement, HttpStatus.CREATED);
         } catch (Exception e) {
+            log.error(" ",e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

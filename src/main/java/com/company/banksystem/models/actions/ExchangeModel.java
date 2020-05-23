@@ -1,8 +1,10 @@
-package com.company.banksystem.models;
+package com.company.banksystem.models.actions;
 
 import com.company.banksystem.enums.Currency;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,8 +12,8 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class ExchangeCurrencyModel {
-    Currency currency;
-    Double selling;
-    Double buying;
+public class ExchangeModel {
+    Currency currencyFrom;
+    Currency currencyTo;
+    BigDecimal amount;
 }
