@@ -86,8 +86,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     public List<BankAccount> getAllAccountsByClientId(Long id){
         return bankAccountRepo.findBankAccountsByClientId(id);
     }
-
-    public BankAccount getAccountByNumber(String number){
+@Override
+    public BankAccount
+findBankAccountByAccountNumber(String number){
         return bankAccountRepo.findBankAccountByAccountNumber(number);
     }
 }

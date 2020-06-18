@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.company</groupId>
 	<artifactId>banksystem</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>banksystem</name>
 	<description>primitve bank system</description>
 

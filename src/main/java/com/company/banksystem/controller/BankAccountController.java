@@ -78,7 +78,7 @@ public class BankAccountController {
     @GetMapping("/searchByNumber/{number}")
     public ResponseEntity getAccountByNumber(@PathVariable("number") String number) {
         try {
-            BankAccount bankAccount = bankAccountService.getAccountByNumber(number);
+            BankAccount bankAccount = bankAccountService.findBankAccountByAccountNumber(number);
             return new ResponseEntity<>(bankAccount, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

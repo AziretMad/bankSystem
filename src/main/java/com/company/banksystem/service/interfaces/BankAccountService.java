@@ -5,4 +5,7 @@ import com.company.banksystem.models.BankAccountModel;
 
 public interface BankAccountService extends BaseService<BankAccount, BankAccountModel> {
     String generateBankAccountNumber();
+    BankAccount findBankAccountByAccountNumber( String number);
+
+
 }
